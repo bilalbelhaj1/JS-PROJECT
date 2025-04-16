@@ -1,0 +1,1 @@
+// here you will write code to get data from the registraion form and do some validation like password should be more then 8 characteres and then send it to the server 

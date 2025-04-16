@@ -6,5 +6,9 @@ router.get('/', (req, res)=>{
     res.render('index');
 })
 
+router.get('/register', (req, res) => {
+    res.render('register');
+})
+
 export default router;
 // app.use('/main', mainRoute);

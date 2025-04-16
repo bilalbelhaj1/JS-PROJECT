@@ -1,0 +1,23 @@
+<div class="auth-container">
+    <h1>Register</h1>
+    <form action="/register" method="POST">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" placeholder="Choose a username" required autocomplete="off" />
+  
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required  autocomplete="off"/>
+  
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Create a password" required autocomplete="off" />
+      <label for="role">Role</label>
+    <select id="role" name="role" required>
+      <option value="Teacher"><i class="fas fa-user-tie"></i> Teacher</option>
+      <option value="Student"><i class="fas fa-user-graduate"></i> Student</option>
+    </select>
+  
+      <button type="submit" >Register</button>
+    </form>
+    <div class="switch-auth">
+      Already have an account? <a href="/login">Login here</a>
+    </div>
+  </div>
