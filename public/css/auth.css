@@ -12,6 +12,13 @@ body{
     box-sizing: border-box;
     margin: 60px auto;
   }
+.auth-container .register-icon{
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+    font-size: 32px;
+    color: rgb(0, 179, 255);
+}
   
   .auth-container h1 {
     text-align: center;
