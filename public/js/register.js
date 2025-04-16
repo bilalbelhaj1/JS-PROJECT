@@ -34,31 +34,35 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     // Prepare data to send
     const data = { username, email, password, role };
 
-    console.log(data);
-});
+    //console.log(data);
 
-// Send data to the server using fetch
-fetch('/auth/register', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json' // Let server know it's JSON
-    },
-    body: JSON.stringify(data)
-})
-.then(response => {
-    if (response.redirected) {
-        window.location.href = response.url; // Redirect if needed
-    } else if (response.ok) {
-        return response.text();
-    } else {
-        throw new Error('Registration failed');
-    }
-})
-.then(result => {
-    alert(result); // Optional: show success message
-})
-.catch(error => {
-    console.error('Error:', error);
-    alert('There was a problem with registration.');
-});
+        
+    // Send data to the server using fetch
+    fetch('/auth/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json' // Let server know it's JSON
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url; // Redirect if needed
+        } else if (response.ok) {
+            return response.text();
+        } else {
+            throw new Error('Registration failed');
+        }
+    })
+    .then(result => {
+        alert(result); // Optional: show success message
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was a problem with registration.');
+    });
 
+        
+    // Optionally, clear the form after submission
+    document.getElementById('registerForm').reset();
+});
