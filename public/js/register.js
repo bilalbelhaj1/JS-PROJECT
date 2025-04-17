@@ -35,9 +35,7 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     const data = { username, email, password, role };
 
     console.log(data);
-});
-
-// Send data to the server using fetch
+    // Send data to the server using fetch
 fetch('/auth/register', {
     method: 'POST',
     headers: {
@@ -60,5 +58,6 @@ fetch('/auth/register', {
 .catch(error => {
     console.error('Error:', error);
     alert('There was a problem with registration.');
+});
 });
 

@@ -25,7 +25,25 @@ body{
     margin-bottom: 18px;
     color: #333;
   }
-  
+  .error-displayer {
+    background-color: #ffe0e0;
+    color: #b00020;
+    border: 1px solid #f5c2c7;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    margin-top: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: all 0.3s ease;
+    display: none;
+    margin-bottom: 10px;
+  }
+    
+  .error-displayer::before {
+    content: "⚠️ ";
+    margin-right: 6px;
+  }
   .auth-container form {
     display: flex;
     flex-direction: column;

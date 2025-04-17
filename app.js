@@ -1,9 +1,12 @@
 import express from 'express';
 import dotenv from 'dotenv';
+dotenv.config();
 import mongoose from 'mongoose';
 import expressLayout from 'express-ejs-layouts';
 import mainRoute from './server/routes/main.js';
 import authRoute from './server/routes/user.js';
+import teacherRoute from './server/routes/teacher.js';
+import studentRoute from './server/routes/student.js'
 
 const app = express();
 
@@ -24,6 +27,8 @@ app.set('view engine', 'ejs');
 
 app.use('/', mainRoute);
 app.use('/auth', authRoute);
+app.use('/teacher', teacherRoute);
+app.use('/student', studentRoute)
 
 // connect to the local mongodb database and start the server if the connection is successful
 mongoose.connect('mongodb://localhost:27017/examdb')
