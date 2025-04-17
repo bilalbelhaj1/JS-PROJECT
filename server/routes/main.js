@@ -7,7 +7,11 @@ router.get('/', (req, res)=>{
 })
 
 router.get('/register', (req, res) => {
-    res.render('register');
+    res.render('auth/register');
+})
+
+router.get('/login', (req, res) => {
+    res.render('auth/login');
 })
 
 export default router;

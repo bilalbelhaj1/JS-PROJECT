@@ -26,7 +26,7 @@ app.use('/', mainRoute);
 app.use('/auth', authRoute);
 
 // connect to the local mongodb database and start the server if the connection is successful
-mongoose.connect(MONGO_URL)
+mongoose.connect('mongodb://localhost:27017/examdb')
     .then(() => {
         console.log('Connected to MongoDB');
         app.listen(PORT, () => {
