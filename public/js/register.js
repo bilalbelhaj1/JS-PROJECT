@@ -1,5 +1,8 @@
 document.getElementById('registerForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent default form submission
+    console.log('Form submitted!'); // Log to console
+    const errorDiv = document.querySelector('.error-displayer');
+    errorDiv.innerText = ''; 
 
     // Get form values
     const username = document.getElementById('username').value.trim();
@@ -9,25 +12,27 @@ document.getElementById('registerForm').addEventListener('submit', function(even
 
     // Basic validation
     if (!username || !email || !password || !role) {
-        alert('Please fill in all fields.');
+        errorDiv.innerText = 'Please fill in all fields.';
+        errorDiv.style.display = 'block' // show error message
         return;
     }
     if (username.length < 5) {
-        alert('Username must be at least 5 characters long.');
+        errorDiv.innerText = 'Username must be at least 5 characters long.'; // show error message
         return;
     }
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
-        alert('Please enter a valid email address.');
+        errorDiv.innerText = 'Please enter a valid email address.'; // show error message
         return;
     }
     if (password.length <= 8) {
-        alert('Password must be more than 8 characters.');
+        errorDiv.innerText = 'Password must be at least 8 characters long.'; // show error message
         return;
     }
-    const validRoles = ['Teacher', 'Student']; // Match the case with your HTML options
+    const validRoles = ['Teacher', 'Student']; 
     if (!validRoles.includes(role)) {
-        alert('Please select a valid role.');
+        errorDiv.innerText = 'Please select a valid role.';
+        errorDiv.style.display = 'block' // show error message
         return;
     }
 
@@ -45,25 +50,26 @@ document.getElementById('registerForm').addEventListener('submit', function(even
         },
         body: JSON.stringify(data)
     })
-    .then(response => {
-        if (response.redirected) {
-            window.location.href = response.url; // Redirect if needed
-        } else if (response.ok) {
-            return response.text();
-        } else {
-            throw new Error('Registration failed');
+    .then(response =>{
+        if(response.status === 400 || response.status === 500) {
+           // get the json data from the response
+           return response.json().then(data => {
+                errorDiv.innerText = data.message;
+                errorDiv.style.display = 'block';
+            });
+        }else{
+            return response.json().then(data => {
+                window.location.href = '/login';
+            })
         }
-    })
-    .then(result => {
-        alert(result); // Optional: show success message
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('There was a problem with registration.');
+        errorDiv.innerText = 'Registration failed. Please try again.'; // show error message
     });
 
         
-    // Optionally, clear the form after submission
+    // clear the form after submission
     document.getElementById('registerForm').reset();
 });
 
