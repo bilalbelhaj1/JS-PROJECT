@@ -190,7 +190,7 @@ body {
 
 .hero .hero-buttons a:hover {
     transform: scale(1.1);
-    background: #1c9bdc;
+    background: var(--secondary);
 }
 
 .features {
