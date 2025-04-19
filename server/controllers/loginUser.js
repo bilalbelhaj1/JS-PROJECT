@@ -20,7 +20,14 @@ const login = async (req, res) =>{
         }
 
         // Generate a JWT token
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "24h" });
+        const token = jwt.sign(
+            { 
+                userId: user._id,
+                role: user.role,  // Add role here
+                username: user.username 
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: "24h" });
 
         let url;
         if(user.role === "Teacher"){

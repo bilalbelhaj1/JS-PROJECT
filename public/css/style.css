@@ -100,6 +100,11 @@ body {
     color: var(--primary);
 }
 
+.nav-buttons #logout{
+    background: var(--danger);
+    color: white;
+}
+
 .nav-buttons .btn.btn-primary, .nav-buttons .btn.btn-outline:hover {
     background: var(--primary);
     color: white;
@@ -130,6 +135,7 @@ body {
     border-radius: 10px;
     display: none;
     z-index: 9999;
+    min-width: 300px;
 }
 
 .sideBar .nav-links {
