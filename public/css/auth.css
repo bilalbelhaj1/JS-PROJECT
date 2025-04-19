@@ -1,123 +1,121 @@
-body{
-    font-family: Arial, Helvetica, sans-serif;
-}
-
 .auth-container {
-    background: white;
-    padding: 40px 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 400px;
-    box-sizing: border-box;
-    margin: 60px auto;
-  }
+  background: white;
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  margin: 60px auto;
+}
 .auth-container .register-icon{
-    margin: 0 auto;
-    width: 100%;
-    text-align: center;
-    font-size: 32px;
-    color: rgb(0, 179, 255);
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+  font-size: 32px;
+  color: rgb(0, 255, 157);
+  margin-bottom: 10px;
+}
+
+.auth-container h1 {
+  text-align: center;
+  margin-bottom: 18px;
+  color: #333;
+}
+
+.error-displayer {
+  background-color: #ffe0e0;
+  color: #b00020;
+  border: 1px solid #f5c2c7;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  margin-top: 10px;
+  display: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
 }
   
-  .auth-container h1 {
-    text-align: center;
-    margin-bottom: 18px;
-    color: #333;
-  }
-  .error-displayer {
-    background-color: #ffe0e0;
-    color: #b00020;
-    border: 1px solid #f5c2c7;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    margin-top: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    transition: all 0.3s ease;
-    display: none;
-    margin-bottom: 10px;
-  }
-    
-  .error-displayer::before {
-    content: "⚠️ ";
-    margin-right: 6px;
-  }
-  .auth-container form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .auth-container form label {
-    font-weight: 600;
-    color: #444;
-  }
-  
-  .auth-container form input,select {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-  }
-  
-  .auth-container form input:focus,select:focus {
-    outline: none;
-    border-color: rgb(76, 134, 200);
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
-  }
-  
-  .auth-container form  button {
-    padding: 12px;
-    font-size: 16px;
-    border: none;
-    background: rgb(76, 134, 200);
-    color: white;
-    font-weight: 600;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  .auth-container form button:hover {
-    background: rgba(76, 134, 200, 0.816);
-  }
+.error-displayer::before {
+  content: "⚠️ ";
+  margin-right: 6px;
+}
 
-  .messages .error, .messages .warning,.messages .succes{
-    font-size: 17px;
-    border-radius: 10px;
-    padding: 7px 10px;
-    margin-bottom: 10px;
-  }
-  
-  .error{
-    color: rgb(235, 230, 230);
-    background: rgb(233, 145, 145);
-  }
+.auth-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
-  .warning{
-    color: #f4f0d2;
-    background: rgb(208, 161, 41);
-  }
-  .succes{
-    background: #57e079;
-    color: #edf6f0;
-  }
-  
-  .switch-auth {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 14px;
-  }
-  
-  .switch-auth a {
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 600;
-  }
-  
-  .switch-auth a:hover {
-    text-decoration: underline;
-  }
-  
+.auth-container form label {
+  font-weight: 600;
+  color: #444;
+}
+
+.auth-container form input,select {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.auth-container form input:focus,select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+}
+
+.auth-container form  button {
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.auth-container form button:hover {
+  background: var(--secondary);
+}
+
+.messages .error, .messages .warning,.messages .succes{
+  font-size: 17px;
+  border-radius: 10px;
+  padding: 7px 10px;
+  margin-bottom: 10px;
+}
+
+.error{
+  color: rgb(235, 230, 230);
+  background: rgb(233, 145, 145);
+}
+
+.warning{
+  color: #f4f0d2;
+  background: rgb(208, 161, 41);
+}
+.succes{
+  background: #57e079;
+  color: #edf6f0;
+}
+
+.switch-auth {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.switch-auth a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.switch-auth a:hover {
+  text-decoration: underline;
+}

@@ -1,6 +1,6 @@
 document.getElementById('registerForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent default form submission
-
+    console.log('Form submitted!'); // Log to console
     const errorDiv = document.querySelector('.error-displayer');
     errorDiv.innerText = ''; 
 
@@ -12,7 +12,8 @@ document.getElementById('registerForm').addEventListener('submit', function(even
 
     // Basic validation
     if (!username || !email || !password || !role) {
-        errorDiv.innerText = 'Please fill in all fields.'; // show error message
+        errorDiv.innerText = 'Please fill in all fields.';
+        errorDiv.style.display = 'block' // show error message
         return;
     }
     if (username.length < 5) {
@@ -30,7 +31,8 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     }
     const validRoles = ['Teacher', 'Student']; 
     if (!validRoles.includes(role)) {
-        errorDiv.innerText = 'Please select a valid role.'; // show error message
+        errorDiv.innerText = 'Please select a valid role.';
+        errorDiv.style.display = 'block' // show error message
         return;
     }
 
@@ -48,17 +50,18 @@ document.getElementById('registerForm').addEventListener('submit', function(even
         },
         body: JSON.stringify(data)
     })
-    .then(async response => {
-        if (response.redirected) {
-            window.location.href = response.url; // Redirect to the login page
-        } else if (response.ok) {
-            return response.text();
-        } else {
-            throw new Error('Registration failed');
+    .then(response =>{
+        if(response.status === 400 || response.status === 500) {
+           // get the json data from the response
+           return response.json().then(data => {
+                errorDiv.innerText = data.message;
+                errorDiv.style.display = 'block';
+            });
+        }else{
+            return response.json().then(data => {
+                window.location.href = '/login';
+            })
         }
-    })
-    .then(result => {
-        alert(result); // show success message
     })
     .catch(error => {
         console.error('Error:', error);
