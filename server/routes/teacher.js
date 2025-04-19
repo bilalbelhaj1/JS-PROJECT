@@ -1,8 +1,10 @@
 import express from 'express';
+import { authenticate, authorizeRole } from '../middleware/authMiddleWare.js';
+
 
 const router = express.Router();
 
-router.get('/dashboard', (req, res)=>{
-    res.render('teacher/dashboard');
+router.get('/home',authenticate, authorizeRole("Teacher"), (req, res)=>{
+    res.render('teacher/dashboard', { user: req.user });
 })
 export default router;

@@ -31,7 +31,7 @@ const login = async (req, res) =>{
 
         let url;
         if(user.role === "Teacher"){
-            url = `/teacher/dashboard`;
+            url = `/teacher/home`;
         }else{
             url = `/student/home`;
         }

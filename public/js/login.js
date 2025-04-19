@@ -43,8 +43,8 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
         if (response.status === 200 || response.status === 201) {
             // Success
             if (result.token) {
-                // Optionally store token in localStorage or cookie
-                localStorage.setItem('authToken', result.token);
+                //localStorage.setItem('authToken', result.token);
+                document.cookie = `authToken=${result.token}; path=/; max-age=86400`;
             }
             if (result.url) {
                 window.location.href = result.url; // Redirect to the URL provided in the response

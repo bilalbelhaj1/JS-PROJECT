@@ -1,37 +1,41 @@
 import express from 'express';
 import dotenv from 'dotenv';
-dotenv.config();
+import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import expressLayout from 'express-ejs-layouts';
+
+// Routes
 import mainRoute from './server/routes/main.js';
 import authRoute from './server/routes/user.js';
 import teacherRoute from './server/routes/teacher.js';
-import studentRoute from './server/routes/student.js'
+import studentRoute from './server/routes/student.js';
 
+// Initialize environment variables
+dotenv.config();
+
+// Create Express app
 const app = express();
 
+// Configurations
 const PORT = process.env.PORT || 5000;
-//const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27017/examdb';
+const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27017/examdb';
 
-const MONGO_URL = 'mongodb+srv://bilalbelhadj2025:4sUgd85m6mAr5DCH@platform-exam.itwebls.mongodb.net/?retryWrites=true&w=majority&appName=platform-exam';
+// Middleware
+app.use(express.json()); // Parse incoming JSON requests
+app.use(express.static('public')); // Serve static files from 'public' directory
+app.use(cookieParser()); // Cookie parsing middleware
+app.use(expressLayout); // Express layout middleware
+app.set('layout', './layouts/main'); // Set default layout for views
+app.set('view engine', 'ejs'); // Set EJS as view engine
 
+// Routes
+app.use('/', mainRoute); // Main route
+app.use('/auth', authRoute); // Auth route
+app.use('/teacher', teacherRoute); // Teacher route
+app.use('/student', studentRoute); // Student route
 
-app.use(express.json());
-
-app.use(express.static('public'));
-
-
-app.use(expressLayout);
-app.set('layout', './layouts/main');
-app.set('view engine', 'ejs');
-
-app.use('/', mainRoute);
-app.use('/auth', authRoute);
-app.use('/teacher', teacherRoute);
-app.use('/student', studentRoute)
-
-// connect to the local mongodb database and start the server if the connection is successful
-mongoose.connect('mongodb://localhost:27017/examdb')
+// Connect to MongoDB and start the server
+mongoose.connect(MONGO_URL)
     .then(() => {
         console.log('Connected to MongoDB');
         app.listen(PORT, () => {
@@ -41,3 +45,8 @@ mongoose.connect('mongodb://localhost:27017/examdb')
     .catch(err => {
         console.error('Error connecting to MongoDB:', err);
     });
+
+// 404 Not Found handler (must come last)
+app.use((req, res) => {
+    res.status(404).send('404 Not Found - The page you are looking for does not exist.');
+});
