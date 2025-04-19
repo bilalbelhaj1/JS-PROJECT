@@ -7,12 +7,11 @@ router.get('/', (req, res)=>{
 })
 
 router.get('/register', (req, res) => {
-    res.render('auth/register');
+    res.render('auth/register', { layout: false });
 })
 
 router.get('/login', (req, res) => {
-    res.render('auth/login');
+    res.render('auth/login', { layout: false });
 })
 
 export default router;
-// app.use('/main', mainRoute);

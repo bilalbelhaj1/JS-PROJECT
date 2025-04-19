@@ -11,19 +11,21 @@ const login = async (req, res) =>{
         // Check if the user exists
         const user = await User.findOne({ email });
         if(!user){
-            return res.status(400).json({ message: "Invalid email or password" });
+            return res.status(400).json({ message: "Invalid email" });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
+        console.log(user.password);
         if(!isMatch){
-            return res.status(400).json({ message: "Invalid email or password" });
+            console.log(isMatch);
+            return res.status(400).json({ message: "Invalid password" });
         }
 
         // Generate a JWT token
         const token = jwt.sign(
             { 
                 userId: user._id,
-                role: user.role,  // Add role here
+                role: user.role, 
                 username: user.username 
             },
             process.env.JWT_SECRET,

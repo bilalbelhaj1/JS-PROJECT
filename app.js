@@ -18,21 +18,22 @@ const app = express();
 
 // Configurations
 const PORT = process.env.PORT || 5000;
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27017/examdb';
+const MONGO_URL = 'mongodb://localhost:27017/examdb';
 
 // Middleware
-app.use(express.json()); // Parse incoming JSON requests
-app.use(express.static('public')); // Serve static files from 'public' directory
-app.use(cookieParser()); // Cookie parsing middleware
-app.use(expressLayout); // Express layout middleware
-app.set('layout', './layouts/main'); // Set default layout for views
-app.set('view engine', 'ejs'); // Set EJS as view engine
+app.use(express.json()); 
+app.use(express.static('public'));
+
+app.use(cookieParser());
+app.use(expressLayout);
+app.set('layout', './layouts/main');
+app.set('view engine', 'ejs'); 
 
 // Routes
-app.use('/', mainRoute); // Main route
-app.use('/auth', authRoute); // Auth route
-app.use('/teacher', teacherRoute); // Teacher route
-app.use('/student', studentRoute); // Student route
+app.use('/', mainRoute); 
+app.use('/auth', authRoute); 
+app.use('/teacher', teacherRoute); 
+app.use('/student', studentRoute); 
 
 // Connect to MongoDB and start the server
 mongoose.connect(MONGO_URL)
@@ -46,7 +47,7 @@ mongoose.connect(MONGO_URL)
         console.error('Error connecting to MongoDB:', err);
     });
 
-// 404 Not Found handler (must come last)
+// 404 Not Found handler 
 app.use((req, res) => {
-    res.status(404).send('404 Not Found - The page you are looking for does not exist.');
+    res.status(404).render('notfound404', { layout: false});
 });
