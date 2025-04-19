@@ -31,12 +31,12 @@ const login = async (req, res) =>{
         return res.status(201).json({
             message: "Login successful",
             token,
+            url,
             user: {
                 id: user._id,
                 username: user.username,
                 email: user.email,
                 role: user.role,
-                url
             }
         })
 
