@@ -28,7 +28,7 @@ const login = async (req, res) =>{
                 role: user.role, 
                 username: user.username 
             },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET || '4sUgd85m6mAr5DCH',
             { expiresIn: "24h" });
 
         let url;
@@ -37,6 +37,7 @@ const login = async (req, res) =>{
         }else{
             url = `/student/home`;
         }
+        
         return res.status(201).json({
             message: "Login successful",
             token,
