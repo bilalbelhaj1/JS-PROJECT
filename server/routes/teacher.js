@@ -9,11 +9,12 @@ router.get('/home',authenticate, authorizeRole("Teacher"), (req, res)=>{
 })
 
 router.get('/createExam', authenticate, authorizeRole('Teacher'), (req, res) =>{
-    res.render('teacher/createExam',{exam:{
+    const examData = req.body || {
         title:'test',
         description: 'just take the test',
         duration:60,
         group: 'Mip 4'
-    }});
+    }
+    res.render('teacher/createExam',{exam: examData});
 })
 export default router;
