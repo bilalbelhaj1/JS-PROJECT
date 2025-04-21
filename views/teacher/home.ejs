@@ -1,1 +1,61 @@
-<h2>WELCOME MR. <%- user.username %> </h2>
+<div class="dashboard">
+    <%- include('sidebar.ejs') %>
+    <div class="main-content">
+        <div class="topbar">
+            <h3>Teacher Dashboard</h3>
+            <div class="user-profile">
+                <img src="/img/2436654.png" alt="Teacher">
+                <span>Prof. <%- user.username %></span>
+            </div>
+        </div>
+        <div class="cards">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Active Exams</h3>
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <p>5</p>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Total Created Exams</h3>
+                    <i class="fas fa-pencil-alt"></i>
+                </div>
+                <p>10</p>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Questions Created</h3>
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <p>87</p>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Total Students Took Your exams</h3>
+                    <i class="fas fa-users"></i>
+                </div>
+                <p>120</p>
+            </div>
+        </div>
+
+        <div class="exam-form">
+            <h3 class="form-title">Create New Exam</h3>
+            <form>
+                <div class="form-group">
+                    <label for="exam-title">Exam Title</label>
+                    <input type="text" id="exam-title" class="form-control" placeholder="e.g., JavaScript Exam">
+                </div>
+                <div class="form-group">
+                    <label for="exam-desc">Description</label>
+                    <textarea id="exam-desc" class="form-control" rows="3" placeholder="Exam instructions..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="exam-audience">Target Audience</label>
+                    <input type="text" id="exam-audience" class="form-control" placeholder="e.g., S4 Mip">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Exam</button>
+            </form>
+        </div>
+    </div> 
+</div>
