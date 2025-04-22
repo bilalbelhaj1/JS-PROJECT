@@ -1,7 +1,5 @@
 import express from 'express';
 import { authenticate, authorizeRole } from '../middleware/authMiddleWare.js';
-import createExam from '../controllers/createExam.js';
-
 
 const router = express.Router();
 
@@ -20,6 +18,5 @@ router.get('/createExam', authenticate, authorizeRole('Teacher'), (req, res) =>{
     res.render('teacher/createExam',{exam: examData});
 })
 
-router.post('/createExam', authenticate, authorizeRole('Teacher'),createExam)
 
 export default router;

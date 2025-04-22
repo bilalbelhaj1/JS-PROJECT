@@ -1,8 +1,6 @@
 // dik data blast matsiftha l backend khas dirha f sessionStorage
 // redirect the teacher to create exam page then you can acces this data from the session storage
-// to addet to the exam object with the questions
-
-
+// to add it  to the exam object with the questions
 
 
 const creatExamBtn = document.getElementById('create-exam-btn');
