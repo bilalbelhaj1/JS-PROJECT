@@ -1,11 +1,38 @@
 <div class="dashboard">
     <%- include('sidebar.ejs') %>
     <div class="main-content">
-        <div class="container">
-            <h1>title: <%- exam.title %> </h1>
-            <h1>description: <%- exam.description  %></h1>
-            <h1>duration: <%- exam.duration %></h1>
-            <h1>group: <%- exam.group %></h1>
+        <div id="alert-message" class="alert" style="display: none;"></div>
+        <div class="topbar">
+            <h3>Add Questions to: <span style="color: var(--primary);" id="js-exam-title"></span></h3>
+            <div class="user-profile">
+                <img src="/img/2436654.png" alt="Teacher">
+                <span>Prof. <%- user.username %> </span>
+            </div>
         </div>
+        <div class="questions-container">
+            
+        </div>
+        <button class="btn btn-primary" id="add-new-question">
+            Add Question
+        </button>
+        <button class="btn btn-primary" id="save-exam-btn">
+            Save Exam
+        </button>
+        <!-- fin ghayban link -->
+<div id="examLinkModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3>Exam Created Successfully!</h3>
+      <p>Share this link with your students:</p>
+      <div class="link-container">
+        <input type="text" id="examLinkInput" readonly>
+        <button id="copyLinkBtn" class="copy-btn">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+      </div>
+      <div id="copyStatus" class="copy-status"></div>
     </div>
+  </div>
 </div>
+</div>
+<script src="/js/teacher/createExam.js"></script>

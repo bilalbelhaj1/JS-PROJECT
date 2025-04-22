@@ -19,5 +19,4 @@ creatExamBtn.addEventListener('click',(e)=>{
         e.preventDefault()
         createForm.classList.remove('active');
     })
-    
 })
