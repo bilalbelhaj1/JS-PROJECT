@@ -22,6 +22,28 @@
    }
 */
 
+/*
+  the object you will send is something like this:
+  
+  {
+  title: 'JavaScript Basics',
+  description: 'just take the test',
+  group: 'Mip',
+  duration: '30',
+  questions: [
+    { enonce: '2+2', type: 'qcm', time: 1, score: 1, options: [Array] },
+    {
+      enonce: '3+3',
+      type: 'direct',
+      time: 1,
+      score: 1,
+      tolerance: 0,
+      answer: '6'
+    }
+  ],
+}
+*/
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const examMetaData = JSON.parse(sessionStorage.getItem('examMetaData'));

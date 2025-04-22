@@ -1,23 +1,21 @@
-const exam = {
-    title: "test",
-    id: '1122222',
-    teacher_id: '1232',
-    duration: 60,
-    description: 'just take the test',
-    questions: [
-        {
-            type:'QCM',
-            number: 1,
-            answer: null,
-            enonce: '1+1',
-            options:[{option: '1', case:false},{option:'3', case:false},{option:'2', case:true}]
-        },
-        {
-            type:'direct',
-            number: 2,
-            enonce: '1-1',
-            answer: '0',
-            options: [],
-        }
-    ]
+/*
+  the object you will recieve is something like this:
+  
+  {
+  title: 'JavaScript Basics',
+  description: 'just take the test',
+  group: 'Mip',
+  duration: '30',
+  questions: [
+    { enonce: '2+2', type: 'qcm', time: 1, score: 1, options: [Array] },
+    {
+      enonce: '3+3',
+      type: 'direct',
+      time: 1,
+      score: 1,
+      tolerance: 0,
+      answer: '6'
+    }
+  ],
 }
+*/
