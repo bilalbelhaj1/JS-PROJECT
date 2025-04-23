@@ -1,15 +1,35 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import Exam from '../models/exams.js'
 
 const router = express.Router();
 
-router.get('/', (req, res)=>{
+router.get('/',async (req, res)=>{
     const token = req.cookies.authToken;
     if(!token){
         res.render('index');
     }else{
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        res.render(`${decoded.role.toLowerCase()}/home`, { user: decoded })
+        if(decoded.role.toLowerCase() === 'teacher'){
+            const teacherId = decoded.userId;
+                const exams = await Exam.find({teacher_id:teacherId})
+                const totalExams = exams.length;
+                let createdQuestions = 0;
+                console.log(exams);
+                let activeExams = 0;
+                if(totalExams !== 0){
+                    activeExams = exams.map(e=>e.status === 'active').length;
+                    exams.forEach(e=>{
+                        createdQuestions += e.questions.length;
+                    })
+                }
+                const examsStatistic = {totalExams, activeExams, createdQuestions};
+                console.log(examsStatistic);
+                res.render('teacher/home', { user: decoded,examsStatistic });
+        }else{
+            res.render('student/home');
+        }
+        /* res.render(`${decoded.role.toLowerCase()}/home`, { user: decoded }) */
     }
 })
 

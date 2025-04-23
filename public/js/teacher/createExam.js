@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!examMetaData) {
         window.location.href = '/teacher/home';
     } else {
-        document.getElementById('js-exam-title').innerText = 'jjj';
+        document.getElementById('js-exam-title').innerText = examMetaData.title;
         createQuestion();
         
         document.getElementById('add-new-question').addEventListener('click', () => {

@@ -4,7 +4,7 @@
         <div class="topbar">
             <h3>Teacher Dashboard</h3>
             <div class="user-profile">
-                <img src="/img/2436654.png" alt="Teacher">
+                <img src="https://media.istockphoto.com/id/1345388323/vector/human-silhouette-isolated-vector-icon.jpg?s=612x612&w=0&k=20&c=a1wg9LYywdqDUG-t9rifrf16XEdWZbWe7ajuYxJTxEI=" alt="Teacher">
                 <span>Prof. <%- user.username %></span>
             </div>
         </div>
@@ -14,28 +14,21 @@
                     <h3>Active Exams</h3>
                     <i class="fas fa-calendar-check"></i>
                 </div>
-                <p>5</p>
+                <p><%- examsStatistic.totalExams %></p>
             </div>
             <div class="card">
                 <div class="card-header">
                     <h3>Total Created Exams</h3>
                     <i class="fas fa-pencil-alt"></i>
                 </div>
-                <p>10</p>
+                <p><%- examsStatistic.activeExams %></p>
             </div>
             <div class="card">
                 <div class="card-header">
                     <h3>Questions Created</h3>
                     <i class="fas fa-question-circle"></i>
                 </div>
-                <p>87</p>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h3>Total Students Took Your exams</h3>
-                    <i class="fas fa-users"></i>
-                </div>
-                <p>120</p>
+                <p><%- examsStatistic.createdQuestions %></p>
             </div>
         </div>
 
