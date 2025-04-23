@@ -4,7 +4,7 @@ const questionSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['direct', 'qcm'] // Ensures only these two types are allowed
+    enum: ['direct', 'qcm']
   },
   time: Number,
   score: Number,
@@ -13,7 +13,7 @@ const questionSchema = new mongoose.Schema({
     option: { type: String, required: true },
     correct: { type: Boolean, required: true, default: false }
   }]
-}, { _id: false }); // _id: false prevents automatic _id creation for subdocuments
+}, { _id: false });
 
 const examSchema = new mongoose.Schema({
   teacher_id: {

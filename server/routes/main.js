@@ -27,7 +27,7 @@ router.get('/',async (req, res)=>{
                 console.log(examsStatistic);
                 res.render('teacher/home', { user: decoded,examsStatistic });
         }else{
-            res.render('student/home');
+            res.render('student/home',{user : decoded});
         }
         /* res.render(`${decoded.role.toLowerCase()}/home`, { user: decoded }) */
     }

@@ -61,12 +61,15 @@
     padding: 12px 15px;
     border-radius: 6px;
     margin-bottom: 20px;
-    display: none;
+    position: fixed;
+    top: 80px;
+    right: 10px;
+    left: 10px;
 }
 
 .alert-success {
-    background-color: rgba(75, 181, 67, 0.2);
-    color: var(--success);
+    background-color: rgba(106, 188, 100, 0.663);
+    color: #52624d;
     border: 1px solid var(--success);
 }
 
@@ -390,17 +393,19 @@
   }
   
   .copy-btn {
-    background-color: #4CAF50;
+    background-color: var(--primary);
     color: white;
     border: none;
     padding: 10px 15px;
     cursor: pointer;
+    font-size: 21px;
+    font-weight: 500;
     border-radius: 0 4px 4px 0;
     transition: background-color 0.3s;
   }
   
   .copy-btn:hover {
-    background-color: #45a049;
+    background-color: var(--secondary);
   }
   
   .copy-status {
