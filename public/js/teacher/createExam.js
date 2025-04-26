@@ -14,21 +14,13 @@ if (data) {
     window.location.href = '/teacher/home';
 }
 
-// add questions dynamic
-// remove question
-// add/remove option
 
 // verify if the sum of the questions mark is 20
 
 // verify if the sum of time gived for each question is equal  to the duration of the exam if not show an error
 // finlly create the exam object to be sent to the backend
-const exam ={
-    title: title,
-    description: description,
-    group: group,
-    duration:duration
-} ;
-//console.log(exam);
+
+
 
 // don't forget to include the exam Meta data stored in the sessionStorage
 
@@ -80,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// chane the type of the question 
 
 function changeQuestionType(questionId, type) {
     const questionCard = document.querySelector(`.question-card[data-question-id="${questionId}"]`);
@@ -119,6 +112,35 @@ document.addEventListener('click', function (e) {
     if (e.target.classList.contains('remove-question-btn')) {
         const questionCard = e.target.closest('.question-card');
         questionCard.remove();
+    }
+});
+
+// Function to add/remove options in QCM questions
+
+document.addEventListener('click', function (e) {
+    // Add Option
+    if (e.target.closest('.add-option')) {
+        const questionCard = e.target.closest('.question-card');
+        const optionsContainer = questionCard.querySelector('.options-container');
+
+        const newOption = document.createElement('div');
+        newOption.classList.add('option-item');
+        newOption.innerHTML = `
+            <input type="text" placeholder="New Option" class="option-input">
+            <input type="checkbox" class="option-correct">
+            <button class="remove-option-btn"><i class="fas fa-trash"></i></button>
+        `;
+
+        optionsContainer.appendChild(newOption);
+    }
+    
+    // Remove Option
+    if (e.target.classList.contains('remove-option-btn') || e.target.closest('.remove-option-btn')) {
+        const button = e.target.closest('.remove-option-btn');
+        const optionItem = button.closest('.option-item');
+        if (optionItem) {
+            optionItem.remove();
+        }
     }
 });
 
@@ -242,4 +264,97 @@ document.addEventListener('click', function (e) {
         const questionId = questionCard.getAttribute('data-question-id');
         changeQuestionType(questionId, 'qcm');
     }
+});
+
+
+function collectAllQuestions() {
+    const questionCards = document.querySelectorAll('.question-card');
+    const questions = [];
+
+    questionCards.forEach(card => {
+        const questionText = card.querySelector('textarea').value.trim();
+        const type = card.querySelector('.btn-direct').classList.contains('active') ? 'direct' : 'qcm';
+        const time = parseInt(card.querySelector('input[placeholder="30"]')?.value) || 0;
+        const score = parseInt(card.querySelector('input[placeholder="10"]')?.value) || 0;
+
+        const questionData = {
+            enonce: questionText,
+            type: type,
+            time: time,
+            score: score
+        };
+
+        if (type === 'direct') {
+            questionData.answer = card.querySelector('.direct-answer-section input[type="text"]').value.trim();
+            questionData.tolerance = parseInt(card.querySelector('.direct-answer-section input[type="number"]')?.value) || 0;
+        } else {
+            const options = [];
+            const optionItems = card.querySelectorAll('.option-item');
+
+            optionItems.forEach(item => {
+                const text = item.querySelector('.option-input').value.trim();
+                const correct = item.querySelector('.option-correct').checked;
+                options.push({ text, correct });
+            });
+
+            questionData.options = options;
+        }
+
+        questions.push(questionData);
+    });
+
+    return questions;
+}
+document.getElementById('save-exam-btn').addEventListener('click', () => {
+    const questions = collectAllQuestions();
+    const exam ={
+        title: title,
+        description: description,
+        group: group,
+        duration: duration,
+        questions: questions
+    }
+    //console.log(exam);
+    // Set your expected values
+    const expectedDuration = exam.duration; // in minutes
+    const expectedScore = 20;
+
+    // Sum time and score
+    let totalTime = 0;
+    let totalScore = 0;
+
+    questions.forEach(qes => {
+        totalTime += qes.time || 0;
+        totalScore += qes.score || 0;
+    });
+
+    // Validation
+    if (totalTime/60 !== expectedDuration) {
+        alert(`The total time (${totalTime}s) does not match the required duration (${expectedDuration}s).`);
+        return;
+    }
+
+    if (totalScore !== expectedScore) {
+        alert(`The total score (${totalScore}) must be exactly ${expectedScore}.`);
+        return;
+    }
+
+    // If everything is valid, send the data to the backend
+    fetch('/teacher/createExam', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(exam)
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Exam created successfully!');
+            window.location.href = '/teacher/home'; // Redirect to home page or another page
+        } else {
+            alert('Failed to create exam. Please try again.');
+        }
+    })
+
+   
 });
