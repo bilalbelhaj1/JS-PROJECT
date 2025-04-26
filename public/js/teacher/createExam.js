@@ -214,11 +214,11 @@ function createQuestion() {
         <div class="settings-group">
             <div class="form-group">
                 <label>Points</label>
-                <input type="number" class="form-control" placeholder="10" min="1">
+                <input type="number" class="form-control" placeholder="5" min="1">
             </div>
             <div class="form-group">
                 <label>Time Limit (seconds)</label>
-                <input type="number" class="form-control" placeholder="30" min="5">
+                <input type="number"  class="form-control" placeholder="30" min="5">
             </div>
         </div>
 </div>`
@@ -272,39 +272,30 @@ function collectAllQuestions() {
     const questions = [];
 
     questionCards.forEach(card => {
-        const questionText = card.querySelector('textarea').value.trim();
         const type = card.querySelector('.btn-direct').classList.contains('active') ? 'direct' : 'qcm';
-        const time = parseInt(card.querySelector('input[placeholder="30"]')?.value) || 0;
-        const score = parseInt(card.querySelector('input[placeholder="10"]')?.value) || 0;
-
-        const questionData = {
-            enonce: questionText,
-            type: type,
-            time: time,
-            score: score
-        };
+        const enonce = card.querySelector('textarea').value.trim();
+        const time = parseInt(card.querySelector('input[placeholder="30"]').value) || 0;
+        const score = parseInt(card.querySelector('input[placeholder="5" ]').value) || 0;
 
         if (type === 'direct') {
-            questionData.answer = card.querySelector('.direct-answer-section input[type="text"]').value.trim();
-            questionData.tolerance = parseInt(card.querySelector('.direct-answer-section input[type="number"]')?.value) || 0;
+            const answer = card.querySelector('.direct-answer-section input[type="text"]').value.trim();
+            const tolerance = parseInt(card.querySelector('.direct-answer-section input[type="number"]').value) || 0;
+            questions.push({ enonce, type, time, score, answer, tolerance });
         } else {
             const options = [];
-            const optionItems = card.querySelectorAll('.option-item');
-
+            const optionItems = card.querySelectorAll('.mcq-options-section .option-item');
             optionItems.forEach(item => {
                 const text = item.querySelector('.option-input').value.trim();
-                const correct = item.querySelector('.option-correct').checked;
-                options.push({ text, correct });
+                const isCorrect = item.querySelector('.option-correct').checked;
+                options.push({ text, isCorrect });
             });
-
-            questionData.options = options;
+            questions.push({ enonce, type, time, score, options });
         }
-
-        questions.push(questionData);
     });
 
     return questions;
 }
+
 document.getElementById('save-exam-btn').addEventListener('click', () => {
     const questions = collectAllQuestions();
     const exam ={
@@ -314,9 +305,9 @@ document.getElementById('save-exam-btn').addEventListener('click', () => {
         duration: duration,
         questions: questions
     }
-    //console.log(exam);
+    console.log(exam);
     // Set your expected values
-    const expectedDuration = exam.duration; // in minutes
+    const expectedDuration = exam.duration*60; // in minutes
     const expectedScore = 20;
 
     // Sum time and score
@@ -329,7 +320,7 @@ document.getElementById('save-exam-btn').addEventListener('click', () => {
     });
 
     // Validation
-    if (totalTime/60 !== expectedDuration) {
+    if (totalTime !== expectedDuration) {
         alert(`The total time (${totalTime}s) does not match the required duration (${expectedDuration}s).`);
         return;
     }
