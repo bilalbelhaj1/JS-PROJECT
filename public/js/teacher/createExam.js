@@ -114,6 +114,20 @@ document.addEventListener('click', function (e) {
     }
 });
 
+// Function to remove a question card
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-question-btn')) {
+        const questionCard = e.target.closest('.question-card');
+        questionCard.remove();
+    }
+});
+
+
+
+
+
+// Function to create a new question card
+
 function createQuestion() {
     const questionId = Date.now(); // Unique ID for each question
     const QuestionHtml = `
