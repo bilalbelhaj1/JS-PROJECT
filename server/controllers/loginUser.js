@@ -28,7 +28,7 @@ const login = async (req, res) =>{
                 role: user.role, 
                 username: user.username 
             },
-            process.env.JWT_SECRET || '4sUgd85m6mAr5DCH',
+            process.env.JWT_SECRET,
             { expiresIn: "24h" });
 
         let url;

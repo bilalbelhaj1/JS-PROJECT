@@ -1,6 +1,7 @@
 // accec the exam meta data from the sessionStorage
+const data = sessionStorage.getItem("examMetaData");
+console.log(data);
 // if there is no examMetaData redirect the teachers to the home page 
-
 
 // add questions dynamic
 // remove question
@@ -10,6 +11,8 @@
 
 // verify if the sum of time gived for each question is equal  to the duration of the exam if not show an error
 // finlly create the exam object to be sent to the backend
+const exam ={} ;
+
 // don't forget to include the exam Meta data stored in the sessionStorage
 
 // note the data in sessionStorage stored on form of :

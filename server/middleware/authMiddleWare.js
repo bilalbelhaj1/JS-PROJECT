@@ -8,7 +8,7 @@ export const authenticate = (req, res, next) => {
     }
 
     try {
-        const secretToken = process.env.JWT_SECRET || '4sUgd85m6mAr5DCH';
+        const secretToken = process.env.JWT_SECRET;
         const decoded = jwt.verify(token, secretToken);
         req.user = decoded;
         next();
