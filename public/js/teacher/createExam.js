@@ -1,7 +1,18 @@
 // accec the exam meta data from the sessionStorage
-const data = sessionStorage.getItem("examMetaData");
-console.log(data);
-// if there is no examMetaData redirect the teachers to the home page 
+const data = JSON.parse(sessionStorage.getItem("examMetaData")); // Parse the string into an object
+
+if (data) {
+    var title = data.title;
+    var description = data.description;
+    var group = data.group;
+    var duration = data.duration;
+
+    // if there is no examMetaData redirect the teachers to the home page 
+} else {
+    console.error("No examMetaData found in sessionStorage.");
+    // Optionally redirect to the home page or handle the error
+    window.location.href = '/teacher/home';
+}
 
 // add questions dynamic
 // remove question
@@ -11,7 +22,13 @@ console.log(data);
 
 // verify if the sum of time gived for each question is equal  to the duration of the exam if not show an error
 // finlly create the exam object to be sent to the backend
-const exam ={} ;
+const exam ={
+    title: title,
+    description: description,
+    group: group,
+    duration:duration
+} ;
+//console.log(exam);
 
 // don't forget to include the exam Meta data stored in the sessionStorage
 
@@ -48,6 +65,7 @@ const exam ={} ;
 */
 
 
+
 document.addEventListener('DOMContentLoaded', () => {
     const examMetaData = JSON.parse(sessionStorage.getItem('examMetaData'));
     if (!examMetaData) {
@@ -59,6 +77,40 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('add-new-question').addEventListener('click', () => {
             createQuestion();
         });
+    }
+});
+
+
+function changeQuestionType(questionId, type) {
+    const questionCard = document.querySelector(`.question-card[data-question-id="${questionId}"]`);
+    const directAnswerSection = questionCard.querySelector('.direct-answer-section');
+    const mcqOptionsSection = questionCard.querySelector('.mcq-options-section');
+    const btnDirect = questionCard.querySelector('.btn-direct');
+    const btnQCM = questionCard.querySelector('.btn-qcm');
+
+    if (type === 'direct') {
+        directAnswerSection.style.display = 'block';
+        mcqOptionsSection.style.display = 'none';
+        btnDirect.classList.add('active');
+        btnQCM.classList.remove('active');
+    } else {
+        directAnswerSection.style.display = 'none';
+        mcqOptionsSection.style.display = 'block';
+        btnDirect.classList.remove('active');
+        btnQCM.classList.add('active');
+    }
+};
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('btn-direct')) {
+        const questionCard = e.target.closest('.question-card');
+        const questionId = questionCard.getAttribute('data-question-id');
+        changeQuestionType(questionId, 'direct');
+    }
+
+    if (e.target.classList.contains('btn-qcm')) {
+        const questionCard = e.target.closest('.question-card');
+        const questionId = questionCard.getAttribute('data-question-id');
+        changeQuestionType(questionId, 'qcm');
     }
 });
 
@@ -143,3 +195,37 @@ const container = document.querySelector('.questions-container');
         behavior: 'smooth'
     });
 }
+
+
+function changeQuestionType(questionId, type) {
+    const questionCard = document.querySelector(`.question-card[data-question-id="${questionId}"]`);
+    const directAnswerSection = questionCard.querySelector('.direct-answer-section');
+    const mcqOptionsSection = questionCard.querySelector('.mcq-options-section');
+    const btnDirect = questionCard.querySelector('.btn-direct');
+    const btnQCM = questionCard.querySelector('.btn-qcm');
+
+    if (type === 'direct') {
+        directAnswerSection.style.display = 'block';
+        mcqOptionsSection.style.display = 'none';
+        btnDirect.classList.add('active');
+        btnQCM.classList.remove('active');
+    } else {
+        directAnswerSection.style.display = 'none';
+        mcqOptionsSection.style.display = 'block';
+        btnDirect.classList.remove('active');
+        btnQCM.classList.add('active');
+    }
+};
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('btn-direct')) {
+        const questionCard = e.target.closest('.question-card');
+        const questionId = questionCard.getAttribute('data-question-id');
+        changeQuestionType(questionId, 'direct');
+    }
+
+    if (e.target.classList.contains('btn-qcm')) {
+        const questionCard = e.target.closest('.question-card');
+        const questionId = questionCard.getAttribute('data-question-id');
+        changeQuestionType(questionId, 'qcm');
+    }
+});
