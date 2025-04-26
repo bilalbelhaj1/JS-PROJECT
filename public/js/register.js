@@ -5,19 +5,21 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     errorDiv.innerText = ''; 
 
     // Get form values
-    const username = document.getElementById('username').value.trim();
+    const Fname = document.getElementById('fname').value.trim();
+    const Lname = document.getElementById('lname').value.trim();
+    const gender = document.getElementById('gender').value.trim();
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const role = document.getElementById('role').value;
 
     // Basic validation
-    if (!username || !email || !password || !role) {
+    if (!Fname || !Lname || !gender || !email || !password || !role) {
         errorDiv.innerText = 'Please fill in all fields.';
         errorDiv.style.display = 'block' // show error message
         return;
     }
-    if (username.length < 5) {
-        errorDiv.innerText = 'Username must be at least 5 characters long.'; // show error message
+    if (Fname.length < 3) {
+        errorDiv.innerText = 'Fname must be at least 5 characters long.'; // show error message
         return;
     }
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,7 +39,7 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     }
 
     // Prepare data to send
-    const data = { username, email, password, role };
+    const data = { Fname,Lname,gender, email, password, role };
 
     //console.log(data);
 
@@ -59,6 +61,7 @@ document.getElementById('registerForm').addEventListener('submit', function(even
             });
         }else{
             return response.json().then(data => {
+                document.getElementById('registerForm').reset();
                 window.location.href = '/login';
             })
         }
@@ -67,9 +70,4 @@ document.getElementById('registerForm').addEventListener('submit', function(even
         console.error('Error:', error);
         errorDiv.innerText = 'Registration failed. Please try again.'; // show error message
     });
-
-        
-    // clear the form after submission
-    document.getElementById('registerForm').reset();
 });
-

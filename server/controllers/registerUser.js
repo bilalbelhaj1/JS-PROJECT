@@ -2,14 +2,10 @@ import User from "../models/user.js";
 import bcrypt from "bcrypt";
 
 const registerUser = async (req, res) => {
-    const { username, password, email, role } = req.body;
-
+    const { Fname,Lname,gender, email, password, role } = req.body;
+    const username = Fname+Lname+Date.now();
+    console.log(username);
     try {
-        const userExists = await User.findOne({ username });
-        if (userExists) {
-            return res.status(400).json({ message: "Username already exists" });
-        }
-
         const emailExists = await User.findOne({ email });
         if (emailExists) {
             return res.status(400).json({ message: "Email already exists" });
@@ -17,10 +13,13 @@ const registerUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({
+            Fname,
+            Lname,
             username,
             email,
             password: hashedPassword,
-            role
+            role,
+            gendre:gender
         });
 
         await newUser.save();

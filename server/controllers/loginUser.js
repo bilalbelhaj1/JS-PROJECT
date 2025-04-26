@@ -24,11 +24,14 @@ const login = async (req, res) =>{
         // Generate a JWT token
         const token = jwt.sign(
             { 
+                Fname:user.Fname,
+                Lname:user.Lname,
                 userId: user._id,
-                role: user.role, 
+                role: user.role,
+                gendre:user.gendre,
                 username: user.username 
             },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET || '4sUgd85m6mAr5DCH',
             { expiresIn: "24h" });
 
         let url;
@@ -37,7 +40,6 @@ const login = async (req, res) =>{
         }else{
             url = `/student/home`;
         }
-        
         return res.status(201).json({
             message: "Login successful",
             token,
