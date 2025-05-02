@@ -313,6 +313,9 @@ function showExamLink(accessToken) {
     closeModal.onclick = function() {
       modal.style.display = 'none';
       copyStatus.textContent = '';
+      // clean the session storage and redirect to home page
+      sessionStorage.removeItem('examMetaData');
+      location.href = '/teacher/home';
     }
     
     // Close modal when clicking outside
@@ -320,6 +323,9 @@ function showExamLink(accessToken) {
       if (event.target == modal) {
         modal.style.display = 'none';
         copyStatus.textContent = '';
+        // clean the session storage and redirect to home page
+        sessionStorage.removeItem('examMetaData');
+        location.href = '/teacher/home';
       }
     }
     
@@ -381,11 +387,11 @@ document.getElementById('save-exam-btn').addEventListener('click', () => {
         body: JSON.stringify(exam)
     })
     .then(response => {
-        if (response.status ===201 || response.status === 200) {
+        if (response.status === 201 || response.status === 200 ) {
             response.json().then(data=>{
-                showExamLink(data.accessToken)
+                const accessToken = data.accessToken;
+                showExamLink(accessToken);
             })
-            
         } else {
             alert('Failed to create exam. Please try again.');
         }
