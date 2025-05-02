@@ -341,6 +341,8 @@ document.getElementById('save-exam-btn').addEventListener('click', () => {
     .then(response => {
         if (response.ok) {
             alert('Exam created successfully!');
+            // Optionally clear sessionStorage or redirect
+            sessionStorage.removeItem('examMetaData'); // Clear the exam metadata from sessionStorage
             window.location.href = '/teacher/home'; // Redirect to home page or another page
         } else {
             alert('Failed to create exam. Please try again.');
