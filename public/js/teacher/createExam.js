@@ -381,7 +381,7 @@ document.getElementById('save-exam-btn').addEventListener('click', () => {
     .then(response => {
         if (response.status == 200 || response.status == 200 ) {
             alert('Exam created successfully!');
-            
+
             //clear sessionStorage and redirect
             sessionStorage.removeItem('examMetaData'); 
             window.location.href = '/teacher/home'; // Redirect to home page or another page
