@@ -12,7 +12,11 @@ const questionSchema = new mongoose.Schema({
   options: [{
     option: { type: String, required: true },
     correct: { type: Boolean, required: true, default: false }
-  }]
+  }],
+  media: {
+    url: String,
+    type: String // 'image', 'audio', or 'video'
+  }
 }, { _id: false });
 
 const examSchema = new mongoose.Schema({

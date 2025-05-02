@@ -1,9 +1,11 @@
 import express from 'express';
+import multer from 'multer';
 import { authenticate, authorizeRole } from '../middleware/authMiddleWare.js';
 import createExam from '../controllers/createExam.js';
 import teacherHome from '../controllers/teacherHome.js'
-
 import Exam from '../models/exams.js';
+
+const upload = multer({dest:'uploads/'});
 
 const router = express.Router();
 
@@ -13,7 +15,7 @@ router.get('/createExam',authenticate, authorizeRole("Teacher"), (req, res) =>{
     res.render('teacher/createExam.ejs', { user: req.user });
 })
 
-router.post('/createExam', authenticate, authorizeRole('Teacher'),createExam);
+router.post('/createExam', authenticate, authorizeRole('Teacher'),upload.single('media'),createExam);
 
 router.get('/myExams', authenticate, authorizeRole('Teacher'), (req, res)=>{
     res.render('teacher/teacherExams',{user:req.user});

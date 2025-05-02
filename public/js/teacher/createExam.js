@@ -1,5 +1,6 @@
 // accec the exam meta data from the sessionStorage
-const data = JSON.parse(sessionStorage.getItem("examMetaData")); // Parse the string into an object
+const data = JSON.parse(sessionStorage.getItem("examMetaData"));
+ // Parse the string into an object
 
 if (data) {
     var title = data.title;
@@ -166,17 +167,9 @@ function createQuestion() {
             <textarea class="form-control" rows="3" placeholder="Enter your question..."></textarea>
         </div>
         <div class="media-upload">
-            <label class="media-upload-btn">
-                <i class="fas fa-image"></i> Image
-                <input type="file" accept="image/*">
-            </label>
-            <label class="media-upload-btn">
-                <i class="fas fa-volume-up"></i> Audio
-                <input type="file" accept="audio/*">
-            </label>
-            <label class="media-upload-btn">
-                <i class="fas fa-video"></i> Video
-                <input type="file" accept="video/*">
+            <label class="media-upload-btn"> 
+                <i class="fa-solid fa-upload"></i>  Upload
+                <input type="file" class="question-media" accept="image/*, audio/*, video/*">
             </label>
         </div>
         <div class="direct-answer-section">
@@ -277,24 +270,71 @@ function collectAllQuestions() {
         const time = parseInt(card.querySelector('input[placeholder="30"]').value) || 0;
         const score = parseInt(card.querySelector('input[placeholder="5" ]').value) || 0;
 
+        const mediaFile = card.querySelector('.question-media').files[0]; // Get the uploaded file
+
+
         if (type === 'direct') {
             const answer = card.querySelector('.direct-answer-section input[type="text"]').value.trim();
             const tolerance = parseInt(card.querySelector('.direct-answer-section input[type="number"]').value) || 0;
-            questions.push({ enonce, type, time, score, answer, tolerance });
+            questions.push({ enonce, type, time, score,tolerance , answer, mediaFile});
         } else {
             const options = [];
             const optionItems = card.querySelectorAll('.mcq-options-section .option-item');
             optionItems.forEach(item => {
                 const text = item.querySelector('.option-input').value.trim();
                 const isCorrect = item.querySelector('.option-correct').checked;
-                options.push({ text, isCorrect });
+                options.push({ option:text, correct:isCorrect });
             });
-            questions.push({ enonce, type, time, score, options });
+            questions.push({ enonce, type, time, score, options,mediaFile });
         }
     });
-
+    console.log(questions);
     return questions;
 }
+
+// Function to show exam link
+function showExamLink(accessToken) {
+    const modal = document.getElementById('examLinkModal');
+    const examLinkInput = document.getElementById('examLinkInput');
+    const copyBtn = document.getElementById('copyLinkBtn');
+    const copyStatus = document.getElementById('copyStatus');
+    const closeModal = document.querySelector('.close-modal');
+    
+    // Generate the exam link
+    const examLink = `${window.location.origin}/student/takeExam/${accessToken}`;
+    examLinkInput.value = examLink;
+    
+    // Show the modal
+    modal.style.display = 'block';
+    
+    // Close modal when X is clicked
+    closeModal.onclick = function() {
+      modal.style.display = 'none';
+      copyStatus.textContent = '';
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = 'none';
+        copyStatus.textContent = '';
+      }
+    }
+    
+    // Copy link functionality
+    copyBtn.onclick = function() {
+      examLinkInput.select();
+      document.execCommand('copy');
+      
+      // Show success message
+      copyStatus.textContent = 'Link copied to clipboard!';
+      setTimeout(() => {
+        copyStatus.textContent = '';
+      }, 2000);
+    }
+}
+
+// save exam to the dataBase
 
 document.getElementById('save-exam-btn').addEventListener('click', () => {
     const questions = collectAllQuestions();
