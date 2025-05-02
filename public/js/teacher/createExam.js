@@ -379,7 +379,7 @@ document.getElementById('save-exam-btn').addEventListener('click', () => {
         body: JSON.stringify(exam)
     })
     .then(response => {
-        if (response.ok) {
+        if (response.status ==200) {
             alert('Exam created successfully!');
             // Optionally clear sessionStorage or redirect
             sessionStorage.removeItem('examMetaData'); // Clear the exam metadata from sessionStorage
