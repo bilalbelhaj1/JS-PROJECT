@@ -18,7 +18,7 @@ const app = express();
 
 // Configurations
 const PORT = process.env.PORT || 5000;
-const MONGO_URL = 'mongodb://localhost:27017/examdb';
+const MONGO_URL = 'mongodb+srv://ayoubchaddad:fE0i6ALU14eCmn4K@cluster0.6dimacj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 // Middleware
 app.use(express.json()); 

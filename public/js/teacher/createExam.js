@@ -1,3 +1,5 @@
+const { json } = require("express");
+
 // accec the exam meta data from the sessionStorage
 const data = JSON.parse(sessionStorage.getItem("examMetaData"));
  // Parse the string into an object
@@ -379,11 +381,11 @@ document.getElementById('save-exam-btn').addEventListener('click', () => {
         body: JSON.stringify(exam)
     })
     .then(response => {
-        if (response.status ==200) {
-            alert('Exam created successfully!');
-            // Optionally clear sessionStorage or redirect
-            sessionStorage.removeItem('examMetaData'); // Clear the exam metadata from sessionStorage
-            window.location.href = '/teacher/home'; // Redirect to home page or another page
+        if (response.status ===201 || response.status === 200) {
+            response.json().then(data=>{
+                showExamLink(data.accessToken)
+            })
+            
         } else {
             alert('Failed to create exam. Please try again.');
         }
