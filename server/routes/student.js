@@ -21,15 +21,6 @@ router.get('/takeExam/:id', authenticate, authorizeRole('Student'), async (req,r
     }, layout:false});
 })
 
-router.post('/takingExam/:accessToken', authenticate, authorizeRole('Student'), async (req, res)=>{
-    try{
-        const accessToken = req.params.accessToken;
-        const exam = await Exam.findOne({accessToken});
-        console.log(exam);
-        res.status(201).json(exam);
-    }catch(err){
-        res.status(404);
-    }
-})
+
 
 export default router;
