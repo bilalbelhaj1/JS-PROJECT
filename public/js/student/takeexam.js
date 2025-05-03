@@ -1,59 +1,37 @@
-/*
-  the object you will recieve is something like this:
-  
-  {
-  title: 'JavaScript Basics',
-  description: 'just take the test',
-  group: 'Mip',
-  duration: '30',
-  questions: [
-    { enonce: '2+2', type: 'qcm', time: 1, score: 1, options: [{option:2, correcte:false, option:4, correcte:true}]},
-    {
-      enonce: '3+3',
-      type: 'direct',
-      time: 1,
-      score: 1,
-      tolerance: 0,
-      answer: '6'
-    }
-  ],
-}event start-btn , request method : post
-*/
- 
+// Event listener for the start button
+
 
 const btn = document.querySelector("#start-btn");
-let exam;
 
-// fach katclicke 3la start had fetch katjib exam mn backend
 btn.addEventListener("click", async () => {
-    const accessToken = btn.getAttribute('data-accessToken'); // Corrected "accesToken" typo
-    // hide the start Button
-    btn.style.display = 'none';
-    fetch(`/student/takingExam/${accessToken}`,{
-        method:'POST',
-        'Content-Type':'Application-json',
-        body: JSON.stringify({accessToken})
-    })
-       .then(response=>{
-          if(response.status === 201){
-            response.json().then(data=>{
-                exam = data;
-                // the exam
-                document.getElementById('display-container').style.display = 'block';
-                console.log(exam);
-                takingExam(exam)
-            })
-          }else{
-            alert("Server Error");
-          }
-       })
-       .catch(err=>{
-          alert("Error: Something went Wrong");
-       })
-});
+    const accessToken = btn.getAttribute('data-accessToken');
 
-console.log(exam);
-function takingExam(exam){
+    // Hide the start button
+    btn.style.display = 'none';
+
+    try {
+        const response = await fetch('/student/takeExam', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ accessToken })
+        });
+
+        if (response.status === 201) {
+            const exam = await response.json();
+            document.getElementById('display-container').style.display = 'block';
+            console.log("Fetched exam:", exam);
+            takingExam(exam); // Assuming you have this function defined
+        } else {
+            alert("Server Error: Could not load exam.");
+        }
+    } catch (err) {
+        console.error("Fetch error:", err);
+        alert("Error: Something went wrong.");
+    } } )
+
+// References
 let timeLeft = document.querySelector(".time-left");
 let quizContainer = document.getElementById("container");
 let nextBtn = document.getElementById("next-button");
@@ -67,126 +45,137 @@ let scoreCount = 0;
 let count = 11;
 let countdown;
 
-//Questions and Options array
+// Next button click event
+nextBtn.addEventListener("click", () => {
+    questionCount++;
 
-const quizArray = exam.questions  
+    if (questionCount === quizArray.length) {
+        // Hide quiz and show score
+        displayContainer.classList.add("hide");
+        scoreContainer.classList.remove("hide");
+        userScore.innerHTML = `Your score is ${scoreCount} out of ${quizArray.length}`;
+    } else {
+        // Update question count and display the next question
+        countOfQuestion.innerHTML = `${questionCount + 1} of ${quizArray.length} Question`;
+        quizDisplay(questionCount);
+        count = 11;  // Reset timer for next question
+        clearInterval(countdown);  // Clear previous interval
+        timerDisplay();  // Start new timer
+    }
+});
 
-
- 
-
-
-//Next Button
-nextBtn.addEventListener(
-    "click",
-    (displayNext = () => {
-        //increment questionCount
-        questionCount += 1;
-        //if last question
-        if (questionCount == quizArray.length) {
-            //hide question container and display score
-            displayContainer.classList.add("hide");
-            scoreContainer.classList.remove("hide");
-            //user score
-            userScore.innerHTML =
-                "Your score is " + scoreCount + " out of " + questionCount;
-        } else {
-            //display questionCount
-            countOfQuestion.innerHTML =
-                questionCount + 1 + " of " + quizArray.length + " Question";
-            //display quiz
-            quizDisplay(questionCount);
-            count = 11;
-            clearInterval(countdown);
-            timerDisplay();
-        }
-    })
-);
-
-//Timer
-const timerDisplay = () => {
+// Timer function
+const timerDisplay = (timeLimit) => {
+    count = timeLimit || 11; // Use the question's time limit or default to 11 seconds
     countdown = setInterval(() => {
         count--;
         timeLeft.innerHTML = `${count}s`;
-        if (count == 0) {
+        if (count === 0) {
             clearInterval(countdown);
-            displayNext();
+            nextBtn.click(); // Trigger the next button click after timer ends
         }
     }, 1000);
 };
 
-//Display quiz
+// Display quiz
 const quizDisplay = (questionCount) => {
     let quizCards = document.querySelectorAll(".container-mid");
-    //Hide other cards
     quizCards.forEach((card) => {
         card.classList.add("hide");
     });
-    //display current question card
     quizCards[questionCount].classList.remove("hide");
 };
 
-//Quiz Creation
+// Quiz creation
 function quizCreator() {
-    //randomly sort questions
-    quizArray.sort(() => Math.random() - 0.5);
-    //generate quiz
     for (let i of quizArray) {
-        //randomly sort options
-        i.options.sort(() => Math.random() - 0.5);
-        //quiz card creation
         let div = document.createElement("div");
         div.classList.add("container-mid", "hide");
-        //question number
-        countOfQuestion.innerHTML = 1 + " of " + quizArray.length + " Question";
-        //question
+
         let question_DIV = document.createElement("p");
         question_DIV.classList.add("question");
-        question_DIV.innerHTML = i.question;
+        question_DIV.innerHTML = i.enonce; // Display question text
         div.appendChild(question_DIV);
-        //options
-        div.innerHTML += `
-    <button class="option-div" onclick="checker(this)">${i.options[0]}</button>
-     <button class="option-div" onclick="checker(this)">${i.options[1]}</button>
-      <button class="option-div" onclick="checker(this)">${i.options[2]}</button>
-       <button class="option-div" onclick="checker(this)">${i.options[3]}</button>
-    `;
+
+        if (i.type === "qcm") {
+            // Multiple-choice options
+            i.options.sort(() => Math.random() - 0.5);
+            i.options.forEach(option => {
+                let button = document.createElement("button");
+                button.classList.add("option-div");
+                button.innerHTML = option.option;
+                button.onclick = () => checker(button, option.correct);
+                div.appendChild(button);
+            });
+        } else {
+            // Direct answer type
+            let input = document.createElement("input");
+            input.type = "text";
+            input.placeholder = "Enter your answer";
+            input.classList.add("direct-answer");
+            div.appendChild(input);
+
+            let submitBtn = document.createElement("button");
+            submitBtn.innerHTML = "Submit";
+            submitBtn.onclick = () => checkerDirect(input.value, i.answer, i.tolerance);
+            div.appendChild(submitBtn);
+        }
+
         quizContainer.appendChild(div);
     }
 }
 
-//Checker Function to check if option is correct or not
-function checker(userOption) {
-    let userSolution = userOption.innerText;
-    let question =
-        document.getElementsByClassName("container-mid")[questionCount];
-    let options = question.querySelectorAll(".option-div");
+// Checker function to validate the answer
+function checker(userOption, isCorrect) {
+    let questionDiv = document.getElementsByClassName("container-mid")[questionCount];
+    let options = questionDiv.querySelectorAll(".option-div");
 
-    //if user clicked answer == correct option stored in object
-    if (userSolution === quizArray[questionCount].correct) {
+    // Mark the selected option as correct or incorrect
+    if (isCorrect) {
         userOption.classList.add("correct");
         scoreCount++;
     } else {
         userOption.classList.add("incorrect");
-        //For marking the correct option
-        options.forEach((element) => {
-            if (element.innerText == quizArray[questionCount].correct) {
-                element.classList.add("correct");
-            }
-        });
     }
 
-    //clear interval(stop timer)
+    // Show the correct options for all options
+    options.forEach((element) => {
+        const matchingOption = window.quizArray[questionCount].options.find(
+            opt => opt.option == element.innerText
+        );
+        if (matchingOption && matchingOption.correct) {
+            element.classList.add("correct");
+        }
+    });
+
+    // Stop the timer and disable all options
     clearInterval(countdown);
-    //disable all options
     options.forEach((element) => {
         element.disabled = true;
     });
 }
 
-//initial setup
+// Direct answer checker
+function checkerDirect(userAnswer, correctAnswer, tolerance) {
+    let normalizedUserAnswer = userAnswer.trim();
+    let normalizedCorrectAnswer = correctAnswer.trim();
+
+    if (Math.abs(Number(normalizedUserAnswer) - Number(normalizedCorrectAnswer)) <= tolerance) {
+        scoreCount++;
+    }
+
+    clearInterval(countdown);
+    nextBtn.disabled = false; // Enable the next button after submission
+
+    // Automatically move to the next question after 2 seconds
+    setTimeout(() => {
+        nextBtn.click();
+    }, 2000);
+}
+
+// Initial setup for the quiz
 function initial() {
     quizContainer.innerHTML = "";
-    quizContainer.style.display = 'block';
     questionCount = 0;
     scoreCount = 0;
     count = 11;
@@ -196,9 +185,8 @@ function initial() {
     quizDisplay(questionCount);
 }
 
-//hide quiz and display start screen
+// Hide quiz and display start screen on page load
 window.onload = () => {
     startScreen.classList.remove("hide");
     displayContainer.classList.add("hide");
 };
-}
