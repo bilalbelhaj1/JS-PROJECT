@@ -1,5 +1,5 @@
 // accec the exam meta data from the sessionStorage
-const data = JSON.parse(sessionStorage.getItem("examMetaData"));
+const data = JSON.parse(sessionStorage.getItem("examMetaData")) || {};
  // Parse the string into an object
 
 if (data) {

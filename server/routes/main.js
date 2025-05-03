@@ -9,7 +9,7 @@ router.get('/',async (req, res)=>{
     if(!token){
         res.render('index');
     }else{
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || '4sUgd85m6mAr5DCH');
         if(decoded.role.toLowerCase() === 'teacher'){
             const teacherId = decoded.userId;
                 const exams = await Exam.find({teacher_id:teacherId})

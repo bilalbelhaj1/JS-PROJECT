@@ -11,6 +11,7 @@ router.get('/home', authenticate, authorizeRole("Student"), (req, res) => {
 router.get('/takeExam/:id', authenticate, authorizeRole('Student'), async (req,res)=>{
     const accessToken = req.params.id;
     const exam = await Exam.findOne({accessToken});
+    console.log(exam);
     const title = exam.title;
     const duration = exam.duration;
     res.render('student/takeExam', {examMetaData: {
@@ -20,10 +21,15 @@ router.get('/takeExam/:id', authenticate, authorizeRole('Student'), async (req,r
     }, layout:false});
 })
 
-router.post('/takeExam', authenticate, authorizeRole('Student'), async (req, res)=>{
-    const accessToken = req.body.accessToken;
-    const exam = await Exam.findOne({accessToken});
-    res.status(200).json(exam);
+router.post('/takingExam/:accessToken', authenticate, authorizeRole('Student'), async (req, res)=>{
+    try{
+        const accessToken = req.params.accessToken;
+        const exam = await Exam.findOne({accessToken});
+        console.log(exam);
+        res.status(201).json(exam);
+    }catch(err){
+        res.status(404);
+    }
 })
 
 export default router;
