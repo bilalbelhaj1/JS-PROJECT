@@ -56,9 +56,6 @@ if (data) {
   ],
 }
 */
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
     const examMetaData = JSON.parse(sessionStorage.getItem('examMetaData'));
     if (!examMetaData) {
@@ -66,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         document.getElementById('js-exam-title').innerText = examMetaData.title;
         createQuestion();
-        
         document.getElementById('add-new-question').addEventListener('click', () => {
             createQuestion();
         });
@@ -313,7 +309,7 @@ function showExamLink(accessToken) {
       copyStatus.textContent = '';
       // clean the session storage and redirect to home page
       sessionStorage.removeItem('examMetaData');
-      location.href = '/teacher/home';
+      location.href = '/teacher/myExams';
     }
     
     // Close modal when clicking outside
@@ -323,7 +319,7 @@ function showExamLink(accessToken) {
         copyStatus.textContent = '';
         // clean the session storage and redirect to home page
         sessionStorage.removeItem('examMetaData');
-        location.href = '/teacher/home';
+        location.href = '/teacher/myExams';
       }
     }
     
