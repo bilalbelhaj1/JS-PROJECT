@@ -9,6 +9,7 @@ const questionSchema = new mongoose.Schema({
   time: Number,
   score: Number,
   tolerance: Number,
+  answer: String,
   options: [{
     option: { type: String, required: true },
     correct: { type: Boolean, required: true, default: false }

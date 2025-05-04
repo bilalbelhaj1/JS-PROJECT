@@ -1,10 +1,10 @@
 // Event listener for the start button
-
-
 const btn = document.querySelector("#start-btn");
+
 
 btn.addEventListener("click", async () => {
     const accessToken = btn.getAttribute('data-accessToken');
+    console.log("Sending accessToken:", accessToken);  // Debug log
 
     // Hide the start button
     btn.style.display = 'none';
@@ -22,14 +22,22 @@ btn.addEventListener("click", async () => {
             const exam = await response.json();
             document.getElementById('display-container').style.display = 'block';
             console.log("Fetched exam:", exam);
-            takingExam(exam); // Assuming you have this function defined
+            takingExam(exam); // Assuming you have this function defined to handle the loaded exam
         } else {
             alert("Server Error: Could not load exam.");
         }
     } catch (err) {
         console.error("Fetch error:", err);
         alert("Error: Something went wrong.");
-    } } )
+    }
+})
+
+// Function to handle the loaded exam
+function takingExam(exam) {
+    window.quizArray = exam.questions; // Store the questions globally for quiz usage
+    window.examDuration = exam.duration; // Store exam duration globally
+    initial(); // Call initial function to start the quiz setup
+}
 
 // References
 let timeLeft = document.querySelector(".time-left");
@@ -58,9 +66,9 @@ nextBtn.addEventListener("click", () => {
         // Update question count and display the next question
         countOfQuestion.innerHTML = `${questionCount + 1} of ${quizArray.length} Question`;
         quizDisplay(questionCount);
-        count = 11;  // Reset timer for next question
+        count = quizArray[questionCount].time || 11;  // Use the question's time limit or default to 11 seconds
         clearInterval(countdown);  // Clear previous interval
-        timerDisplay();  // Start new timer
+        timerDisplay(count);  // Start new timer
     }
 });
 
@@ -178,9 +186,8 @@ function initial() {
     quizContainer.innerHTML = "";
     questionCount = 0;
     scoreCount = 0;
-    count = 11;
     clearInterval(countdown);
-    timerDisplay();
+    timerDisplay(quizArray[0].time || 11);  // Use the first question's time limit or default to 11 seconds
     quizCreator();
     quizDisplay(questionCount);
 }

@@ -20,7 +20,48 @@ router.get('/takeExam/:id', authenticate, authorizeRole('Student'), async (req,r
         duration
     }, layout:false});
 })
+router.post('/takeExam', authenticate, authorizeRole('Student'), async (req, res) => {
+    console.log("Route hit: /takeExam");  // Debug log to confirm route is hit
+    const { accessToken } = req.body;
+    console.log('Received accessToken:', accessToken);  // Debug log
 
+    try {
+        const exam = await Exam.findOne({ accessToken });
+
+        if (!exam) {
+            console.log('Exam not found');
+            return res.status(404).json({ message: "Exam not found" });
+        }
+
+        const examToSend = {
+            title: exam.title,
+            description: exam.description,
+            duration: exam.duration,
+            questions: exam.questions.map(q => {
+                const cleanOptions = q.options?.map(opt => ({
+                    option: opt.option
+                }));
+
+                return {
+                    enonce: q.enonce,
+                    type: q.type,
+                    time: q.time,
+                    score: q.score,
+                    tolerance: q.tolerance,
+                    options: cleanOptions,
+                    media: q.media
+                };
+            })
+        };
+
+        console.log('Exam found:', examToSend);
+        res.status(201).json(examToSend);
+    } catch (err) {
+        console.error("Error fetching exam:", err.message); // Log the error message
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+    
+    });
 
 
 export default router;
