@@ -4,16 +4,16 @@ const btn = document.querySelector("#start-btn");
 
 btn.addEventListener("click", async () => {
     console.log("clicked"); 
+
+    /*
     const accessToken = btn.getAttribute('data-accessToken');
     console.log("Sending accessToken:", accessToken);  // Debug log
-
     // Hide the start button
     btn.style.display = 'none';
-
     try {
         console.log("Sending accessToken:", accessToken);
 
-        const response = await fetch('/student/takeExam', {
+        const response = await fetch(`/student/takingExam/${accessToken}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -22,11 +22,11 @@ btn.addEventListener("click", async () => {
             body: JSON.stringify({ accessToken })
         });
 
-        if (response.status === 201) {
+        if (response.status === 201 || response.status ===200 || response.ok ) {
             const exam = await response.json();
             document.getElementById('display-container').style.display = 'block';
             console.log("Fetched exam:", exam);
-            takingExam(exam); // Assuming you have this function defined to handle the loaded exam
+            takingExam(exam); 
         } else {
             alert("Server Error: Could not load exam.");
         }
@@ -34,6 +34,81 @@ btn.addEventListener("click", async () => {
         console.error("Fetch error:", err);
         alert("Error: Something went wrong.");
     }
+        */
+    const btn = document.querySelector("#start-btn");
+
+    btn.addEventListener("click", () => {
+        btn.style.display = 'none';
+    
+        const Exam = {
+            title: "Sample Math Exam",
+            description: "A basic math exam to test addition and subtraction skills.",
+            group: "Grade 5",
+            duration: 30,
+            status: "active",
+            accessToken: "dummy-access-token-12345",
+            questions: [
+                {
+                    enonce: "What is 5 + 7?",
+                    type: "direct",
+                    time: 30,
+                    score: 5,
+                    tolerance: 0,
+                    options: [],
+                    media: null
+                },
+                {
+                    enonce: "Select all prime numbers below.",
+                    type: "qcm",
+                    time: 45,
+                    score: 5,
+                    options: [
+                        { option: "2", correct: true },
+                        { option: "3", correct: true },
+                        { option: "4", correct: false },
+                        { option: "6", correct: false }
+                    ],
+                    media: null
+                },
+                {
+                    enonce: "What is the capital of France?",
+                    type: "direct",
+                    time: 30,
+                    score: 5,
+                    tolerance: 0,
+                    options: [],
+                    media: {
+                        fileType: "image/png",
+                        fileName: "paris.png",
+                        filePath: "../../../uploads/paris.png"
+                    }
+                },
+                {
+                    enonce: "Which of these are programming languages?",
+                    type: "qcm",
+                    time: 45,
+                    score: 5,
+                    options: [
+                        { option: "JavaScript", correct: true },
+                        { option: "Python", correct: true },
+                        { option: "Car", correct: false },
+                        { option: "Banana", correct: false }
+                    ],
+                    media: {
+                        fileType: "image/jpeg",
+                        fileName: "coding.jpg",
+                        filePath: "../../../uploads/coding.jpg"
+                    }
+                }
+            ]
+        };
+    
+        document.querySelector(".exam-header h1").innerText = Exam.title;
+        document.querySelector(".exam-header p").innerText = Exam.description;
+        document.getElementById('display-container').style.display = 'block';
+        takingExam(Exam);
+    });
+    
 })
 
 // Function to handle the loaded exam
@@ -169,6 +244,11 @@ function checker(userOption, isCorrect) {
 
 // Direct answer checker
 function checkerDirect(userAnswer, correctAnswer, tolerance) {
+    if (correctAnswer === undefined) {
+        alert("This question is missing a correct answer.");
+        return;
+    }
+
     let normalizedUserAnswer = userAnswer.trim();
     let normalizedCorrectAnswer = correctAnswer.trim();
 
@@ -177,9 +257,8 @@ function checkerDirect(userAnswer, correctAnswer, tolerance) {
     }
 
     clearInterval(countdown);
-    nextBtn.disabled = false; // Enable the next button after submission
+    nextBtn.disabled = false;
 
-    // Automatically move to the next question after 2 seconds
     setTimeout(() => {
         nextBtn.click();
     }, 2000);
@@ -191,7 +270,7 @@ function initial() {
     questionCount = 0;
     scoreCount = 0;
     clearInterval(countdown);
-    timerDisplay(quizArray[0].time || 11);  // Use the first question's time limit or default to 11 seconds
+    timerDisplay(quizArray[0].time || 30);  // Use the first question's time limit or default to 30 seconds
     quizCreator();
     quizDisplay(questionCount);
 }
