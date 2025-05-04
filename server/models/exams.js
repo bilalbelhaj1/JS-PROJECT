@@ -18,7 +18,9 @@ const questionSchema = new mongoose.Schema({
     url: String,
     type: String // 'image', 'audio', or 'video'
   }
-}, { _id: false });
+}, 
+
+{ _id: false });
 
 const examSchema = new mongoose.Schema({
   teacher_id: {

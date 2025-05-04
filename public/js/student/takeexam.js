@@ -3,6 +3,7 @@ const btn = document.querySelector("#start-btn");
 
 
 btn.addEventListener("click", async () => {
+    console.log("clicked"); 
     const accessToken = btn.getAttribute('data-accessToken');
     console.log("Sending accessToken:", accessToken);  // Debug log
 
@@ -10,11 +11,14 @@ btn.addEventListener("click", async () => {
     btn.style.display = 'none';
 
     try {
+        console.log("Sending accessToken:", accessToken);
+
         const response = await fetch('/student/takeExam', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify({ accessToken })
         });
 

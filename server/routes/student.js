@@ -9,17 +9,33 @@ router.get('/home', authenticate, authorizeRole("Student"), (req, res) => {
 });
 
 router.get('/takeExam/:id', authenticate, authorizeRole('Student'), async (req,res)=>{
-    const accessToken = req.params.id;
-    const exam = await Exam.findOne({accessToken});
-    console.log(exam);
-    const title = exam.title;
-    const duration = exam.duration;
-    res.render('student/takeExam', {examMetaData: {
-        accessToken,
-        title,
-        duration
-    }, layout:false});
-})
+    try {
+        const accessToken = req.params.id;
+        const exam = await Exam.findOne({accessToken});
+        console.log("GET /takeExam/:id -> Found exam:", exam);
+
+        if (!exam) {
+            return res.status(404).send("Exam not found");
+        }
+
+        const title = exam.title;
+        const duration = exam.duration;
+        res.render('student/takeExam', {
+            examMetaData: {
+                accessToken,
+                title,
+                duration,
+                description: exam.description
+            },
+            layout: false
+        });
+    } catch (err) {
+        console.error("Error in GET /takeExam/:id:", err);
+        res.status(500).send("Server Error");
+    }
+});
+
+
 router.post('/takeExam', authenticate, authorizeRole('Student'), async (req, res) => {
     console.log("Route hit: /takeExam");  // Debug log to confirm route is hit
     const { accessToken } = req.body;
