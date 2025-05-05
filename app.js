@@ -38,7 +38,7 @@ app.use('/teacher', teacherRoute);
 app.use('/student', studentRoute); 
 
 // Connect to MongoDB and start the server
-mongoose.connect(MONGO_LOCAL)
+mongoose.connect(Mongo_CLOUD)
     .then(() => {
         console.log('Connected to MongoDB');
         app.listen(PORT, () => {
