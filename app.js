@@ -24,6 +24,7 @@ const MONGO_LOCAL = 'mongodb://localhost:27017/examdb';
 // Middleware
 app.use(express.json()); 
 app.use(express.static('public'));
+app.use(express.static('assets'));
 
 app.use(cookieParser());
 app.use(expressLayout);

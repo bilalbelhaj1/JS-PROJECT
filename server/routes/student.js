@@ -17,6 +17,7 @@ router.get('/takeExam/:id', authenticate, authorizeRole('Student'), async (req,r
     res.render('student/takeExam', {examMetaData: {
         accessToken,
         title,
+        questionsCount: exam.questions.length,
         duration
     }, layout:false});
 })

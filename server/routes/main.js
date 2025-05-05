@@ -25,7 +25,7 @@ router.get('/',async (req, res)=>{
                 }
                 const examsStatistic = {totalExams, activeExams, createdQuestions};
                 console.log(examsStatistic);
-                res.render('teacher/home', { user: decoded,examsStatistic });
+                res.render('teacher/home', { user: decoded,examsStatistic,activePage: 'home' });
         }else{
             res.render('student/home',{user : decoded});
         }
