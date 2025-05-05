@@ -14,8 +14,12 @@ const questionSchema = new mongoose.Schema({
     correct: { type: Boolean, required: true, default: false }
   }],
   media: {
-    url: String,
-    type: String // 'image', 'audio', or 'video'
+    type: {
+      fileType: String,
+      fileName: String,
+      filePath: String
+    },
+    default: null
   }
 }, { _id: false });
 

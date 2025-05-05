@@ -1,2 +1,5 @@
 .env
 node_modules/
+uploads/.png
+uploads/.mp4
+uploads/.mp3

@@ -18,8 +18,11 @@ router.get('/profile',authenticate, (req, res) =>{
             return res.render('auth/login');
         }
         // Render the profile page with teacher data
-        console.log(user);
-        res.render(`${user.role}/profile.ejs`, {user})
+        if(user.role === 'Student'){
+            res.render('student/profile.ejs', {user})
+        }else{
+            res.render('teacher/profile.ejs',{user,activePage:'profile'});
+        }
     }).catch((error) => {
         console.error(error);
         res.status(500).send('Server error');

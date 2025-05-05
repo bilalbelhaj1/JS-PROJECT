@@ -16,7 +16,7 @@ const teacherHome = async (req, res)=>{
     }
     const examsStatistic = {totalExams, activeExams, createdQuestions};
     console.log(examsStatistic);
-    res.render('teacher/home', { user: req.user,examsStatistic });
+    res.render('teacher/home', { user: req.user,examsStatistic,activePage: 'home' });
 }
 
 export default teacherHome;
