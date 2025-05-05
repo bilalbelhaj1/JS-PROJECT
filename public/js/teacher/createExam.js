@@ -1,61 +1,16 @@
-// accec the exam meta data from the sessionStorage
+// Access the exam meta data from the sessionStorage
 const data = JSON.parse(sessionStorage.getItem("examMetaData")) || {};
- // Parse the string into an object
 
 if (data) {
     var title = data.title;
     var description = data.description;
     var group = data.group;
     var duration = data.duration;
-
-    // if there is no examMetaData redirect the teachers to the home page 
 } else {
     console.error("No examMetaData found in sessionStorage.");
-    // Optionally redirect to the home page or handle the error
     window.location.href = '/teacher/home';
 }
 
-
-// verify if the sum of the questions mark is 20
-
-// verify if the sum of time gived for each question is equal  to the duration of the exam if not show an error
-// finlly create the exam object to be sent to the backend
-
-
-
-// don't forget to include the exam Meta data stored in the sessionStorage
-
-// note the data in sessionStorage stored on form of :
-/* 
-   {
-      title,
-      description,
-      group,
-      duration
-   }
-*/
-
-/*
-  the object you will send is something like this:
-  
-  {
-  title: 'JavaScript Basics',
-  description: 'just take the test',
-  group: 'Mip',
-  duration: '30',
-  questions: [
-    { enonce: '2+2', type: 'qcm', time: 1, score: 1, options: [Array] },
-    {
-      enonce: '3+3',
-      type: 'direct',
-      time: 1,
-      score: 1,
-      tolerance: 0,
-      answer: '6'
-    }
-  ],
-}
-*/
 document.addEventListener('DOMContentLoaded', () => {
     const examMetaData = JSON.parse(sessionStorage.getItem('examMetaData'));
     if (!examMetaData) {
@@ -69,8 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// chane the type of the question 
-
+// Change the type of the question
 function changeQuestionType(questionId, type) {
     const questionCard = document.querySelector(`.question-card[data-question-id="${questionId}"]`);
     const directAnswerSection = questionCard.querySelector('.direct-answer-section');
@@ -89,7 +43,9 @@ function changeQuestionType(questionId, type) {
         btnDirect.classList.remove('active');
         btnQCM.classList.add('active');
     }
-};
+}
+
+// Event delegation for question type changes
 document.addEventListener('click', function (e) {
     if (e.target.classList.contains('btn-direct')) {
         const questionCard = e.target.closest('.question-card');
@@ -102,19 +58,13 @@ document.addEventListener('click', function (e) {
         const questionId = questionCard.getAttribute('data-question-id');
         changeQuestionType(questionId, 'qcm');
     }
-});
 
-// Function to remove a question card
-document.addEventListener('click', function (e) {
-    if (e.target.classList.contains('remove-question-btn')) {
+    // Remove question
+    if (e.target.classList.contains('remove-question-btn') || e.target.closest('.remove-question-btn')) {
         const questionCard = e.target.closest('.question-card');
         questionCard.remove();
     }
-});
 
-// Function to add/remove options in QCM questions
-
-document.addEventListener('click', function (e) {
     // Add Option
     if (e.target.closest('.add-option')) {
         const questionCard = e.target.closest('.question-card');
@@ -127,7 +77,6 @@ document.addEventListener('click', function (e) {
             <input type="checkbox" class="option-correct">
             <button class="remove-option-btn"><i class="fas fa-trash"></i></button>
         `;
-
         optionsContainer.appendChild(newOption);
     }
     
@@ -141,14 +90,9 @@ document.addEventListener('click', function (e) {
     }
 });
 
-
-
-
-
-// Function to create a new question card
-
+// Create a new question card
 function createQuestion() {
-    const questionId = Date.now(); // Unique ID for each question
+    const questionId = Date.now();
     const QuestionHtml = `
     <div class="question-card" data-question-id="${questionId}">
         <div class="question-header">
@@ -160,22 +104,23 @@ function createQuestion() {
         </div>
         <div class="form-group">
             <label>Question Text</label>
-            <textarea class="form-control" rows="3" placeholder="Enter your question..."></textarea>
+            <textarea class="form-control" rows="3" placeholder="Enter your question..." required></textarea>
         </div>
         <div class="media-upload">
             <label class="media-upload-btn"> 
-                <i class="fa-solid fa-upload"></i>  Upload
+                <i class="fa-solid fa-upload"></i> Upload
                 <input type="file" class="question-media" accept="image/*, audio/*, video/*">
             </label>
+            <span class="file-name">No file selected</span>
         </div>
         <div class="direct-answer-section">
             <div class="form-group">
                 <label>Correct Answer</label>
-                <input type="text" class="form-control" placeholder="Expected answer">
+                <input type="text" class="form-control" placeholder="Expected answer" required>
             </div>
             <div class="form-group">
                 <label>Tolerance (%)</label>
-                <input type="number" class="form-control" placeholder="10" min="0" max="100">
+                <input type="number" class="form-control" placeholder="10" min="0" max="100" required>
                 <small>Percentage of allowed variation in student answers (e.g., for typos).</small>
             </div>
         </div>
@@ -184,12 +129,12 @@ function createQuestion() {
                 <label>Options (Check correct answers)</label>
                 <div class="options-container">
                     <div class="option-item">
-                        <input type="text" placeholder="Option 1" class="option-input">
+                        <input type="text" placeholder="Option 1" class="option-input" required>
                         <input type="checkbox" class="option-correct">
                         <button class="remove-option-btn"><i class="fas fa-trash"></i></button>
                     </div>
                     <div class="option-item">
-                        <input type="text" placeholder="Option 2" class="option-input">
+                        <input type="text" placeholder="Option 2" class="option-input" required>
                         <input type="checkbox" class="option-correct">
                         <button class="remove-option-btn"><i class="fas fa-trash"></i></button>
                     </div>
@@ -203,59 +148,34 @@ function createQuestion() {
         <div class="settings-group">
             <div class="form-group">
                 <label>Points</label>
-                <input type="number" class="form-control" placeholder="5" min="1">
+                <input type="number" class="form-control" placeholder="5" min="1" required>
             </div>
             <div class="form-group">
                 <label>Time Limit (seconds)</label>
-                <input type="number"  class="form-control" placeholder="30" min="5">
+                <input type="number" class="form-control" placeholder="30" min="5" required>
             </div>
         </div>
-</div>`
-const container = document.querySelector('.questions-container');
+    </div>`;
+    
+    const container = document.querySelector('.questions-container');
     container.insertAdjacentHTML('beforeend', QuestionHtml);
 
-    // Scroll to the bottom of the page
+    // Add event listener for file selection
+    const newCard = container.lastElementChild;
+    const fileInput = newCard.querySelector('.question-media');
+    const fileNameDisplay = newCard.querySelector('.file-name');
+    
+    fileInput.addEventListener('change', function() {
+        fileNameDisplay.textContent = this.files[0] ? this.files[0].name : 'No file selected';
+    });
+
     window.scrollTo({
         top: document.body.scrollHeight,
         behavior: 'smooth'
     });
 }
 
-
-function changeQuestionType(questionId, type) {
-    const questionCard = document.querySelector(`.question-card[data-question-id="${questionId}"]`);
-    const directAnswerSection = questionCard.querySelector('.direct-answer-section');
-    const mcqOptionsSection = questionCard.querySelector('.mcq-options-section');
-    const btnDirect = questionCard.querySelector('.btn-direct');
-    const btnQCM = questionCard.querySelector('.btn-qcm');
-
-    if (type === 'direct') {
-        directAnswerSection.style.display = 'block';
-        mcqOptionsSection.style.display = 'none';
-        btnDirect.classList.add('active');
-        btnQCM.classList.remove('active');
-    } else {
-        directAnswerSection.style.display = 'none';
-        mcqOptionsSection.style.display = 'block';
-        btnDirect.classList.remove('active');
-        btnQCM.classList.add('active');
-    }
-};
-document.addEventListener('click', function (e) {
-    if (e.target.classList.contains('btn-direct')) {
-        const questionCard = e.target.closest('.question-card');
-        const questionId = questionCard.getAttribute('data-question-id');
-        changeQuestionType(questionId, 'direct');
-    }
-
-    if (e.target.classList.contains('btn-qcm')) {
-        const questionCard = e.target.closest('.question-card');
-        const questionId = questionCard.getAttribute('data-question-id');
-        changeQuestionType(questionId, 'qcm');
-    }
-});
-
-
+// Collect all questions data
 function collectAllQuestions() {
     const questionCards = document.querySelectorAll('.question-card');
     const questions = [];
@@ -264,31 +184,31 @@ function collectAllQuestions() {
         const type = card.querySelector('.btn-direct').classList.contains('active') ? 'direct' : 'qcm';
         const enonce = card.querySelector('textarea').value.trim();
         const time = parseInt(card.querySelector('input[placeholder="30"]').value) || 0;
-        const score = parseInt(card.querySelector('input[placeholder="5" ]').value) || 0;
-
-        const mediaFile = card.querySelector('.question-media').files[0]; // Get the uploaded file
-
+        const score = parseInt(card.querySelector('input[placeholder="5"]').value) || 0;
+        const mediaFile = card.querySelector('.question-media').files[0];
 
         if (type === 'direct') {
             const answer = card.querySelector('.direct-answer-section input[type="text"]').value.trim();
             const tolerance = parseInt(card.querySelector('.direct-answer-section input[type="number"]').value) || 0;
-            questions.push({ enonce, type, time, score,tolerance , answer, mediaFile});
+            questions.push({ enonce, type, time, score, tolerance, answer, mediaFile });
         } else {
             const options = [];
             const optionItems = card.querySelectorAll('.mcq-options-section .option-item');
             optionItems.forEach(item => {
                 const text = item.querySelector('.option-input').value.trim();
                 const isCorrect = item.querySelector('.option-correct').checked;
-                options.push({ option:text, correct:isCorrect });
+                if (text) { // Only include non-empty options
+                    options.push({ option: text, correct: isCorrect });
+                }
             });
-            questions.push({ enonce, type, time, score, options,mediaFile });
+            questions.push({ enonce, type, time, score, options, mediaFile });
         }
     });
-    console.log(questions);
+    
     return questions;
 }
 
-// Function to show exam link
+// Show exam link modal
 function showExamLink(accessToken) {
     const modal = document.getElementById('examLinkModal');
     const examLinkInput = document.getElementById('examLinkInput');
@@ -296,72 +216,68 @@ function showExamLink(accessToken) {
     const copyStatus = document.getElementById('copyStatus');
     const closeModal = document.querySelector('.close-modal');
     
-    // Generate the exam link
     const examLink = `${window.location.origin}/student/takeExam/${accessToken}`;
     examLinkInput.value = examLink;
-    
-    // Show the modal
     modal.style.display = 'block';
     
-    // Close modal when X is clicked
     closeModal.onclick = function() {
-      modal.style.display = 'none';
-      copyStatus.textContent = '';
-      // clean the session storage and redirect to home page
-      sessionStorage.removeItem('examMetaData');
-      location.href = '/teacher/myExams';
-    }
-    
-    // Close modal when clicking outside
-    window.onclick = function(event) {
-      if (event.target == modal) {
         modal.style.display = 'none';
         copyStatus.textContent = '';
-        // clean the session storage and redirect to home page
         sessionStorage.removeItem('examMetaData');
         location.href = '/teacher/myExams';
-      }
     }
     
-    // Copy link functionality
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+            copyStatus.textContent = '';
+            sessionStorage.removeItem('examMetaData');
+            location.href = '/teacher/myExams';
+        }
+    }
+    
     copyBtn.onclick = function() {
-      examLinkInput.select();
-      document.execCommand('copy');
-      
-      // Show success message
-      copyStatus.textContent = 'Link copied to clipboard!';
-      setTimeout(() => {
-        copyStatus.textContent = '';
-      }, 2000);
+        examLinkInput.select();
+        document.execCommand('copy');
+        copyStatus.textContent = 'Link copied to clipboard!';
+        setTimeout(() => {
+            copyStatus.textContent = '';
+        }, 2000);
     }
 }
 
-// save exam to the dataBase
-
-document.getElementById('save-exam-btn').addEventListener('click', () => {
+// Save exam to database
+document.getElementById('save-exam-btn').addEventListener('click', async () => {
     const questions = collectAllQuestions();
-    const exam ={
-        title: title,
-        description: description,
-        group: group,
-        duration: duration,
-        questions: questions
+    const examMetaData = JSON.parse(sessionStorage.getItem('examMetaData'));
+    
+    // Validate required fields
+    for (const question of questions) {
+        if (!question.enonce) {
+            alert('Please fill in all question texts');
+            return;
+        }
+        if (question.type === 'direct' && !question.answer) {
+            alert('Please fill in all answer fields for direct questions');
+            return;
+        }
+        if (question.type === 'qcm' && question.options.length < 2) {
+            alert('Each QCM question must have at least 2 options');
+            return;
+        }
     }
-    console.log(exam);
-    // Set your expected values
-    const expectedDuration = exam.duration*60; // in minutes
-    const expectedScore = 20;
 
-    // Sum time and score
+    // Validate total time and score
+    const expectedDuration = examMetaData.duration * 60;
+    const expectedScore = 20;
     let totalTime = 0;
     let totalScore = 0;
 
-    questions.forEach(qes => {
-        totalTime += qes.time || 0;
-        totalScore += qes.score || 0;
+    questions.forEach(q => {
+        totalTime += q.time || 0;
+        totalScore += q.score || 0;
     });
 
-    // Validation
     if (totalTime !== expectedDuration) {
         alert(`The total time (${totalTime}s) does not match the required duration (${expectedDuration}s).`);
         return;
@@ -372,24 +288,43 @@ document.getElementById('save-exam-btn').addEventListener('click', () => {
         return;
     }
 
-    // If everything is valid, send the data to the backend
-    fetch('/teacher/createExam', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(exam)
-    })
-    .then(response => {
-        if (response.status === 201 || response.status === 200 ) {
-            response.json().then(data=>{
-                const accessToken = data.accessToken;
-                showExamLink(accessToken);
-            })
-        } else {
-            alert('Failed to create exam. Please try again.');
+    // Prepare FormData for file upload
+    const formData = new FormData();
+    formData.append('title', examMetaData.title);
+    formData.append('description', examMetaData.description);
+    formData.append('group', examMetaData.group);
+    formData.append('duration', examMetaData.duration);
+    
+    // Add questions data (without files)
+    const questionsData = questions.map(q => {
+        const questionData = { ...q };
+        delete questionData.mediaFile; // Remove the File object
+        return questionData;
+    });
+    formData.append('questions', JSON.stringify(questionsData));
+    
+    // Add media files with correct field names
+    questions.forEach((q, index) => {
+        if (q.mediaFile) {
+            formData.append(`questions[${index}][media]`, q.mediaFile);
         }
-    })
+    });
 
-   
+    try {
+        const response = await fetch('/teacher/createExam', {
+            method: 'POST',
+            body: formData // No Content-Type header needed for FormData
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            showExamLink(data.accessToken);
+        } else {
+            const error = await response.json();
+            alert(error.message || 'Failed to create exam. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while saving the exam.');
+    }
 });
