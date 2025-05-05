@@ -1,51 +1,35 @@
-
- 
-    
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
     <link rel="stylesheet" href="/css/student/takeExam.css">
-
-    <title>Quiz App using JavaScript - @code.scientist x @codingtorque</title>
 </head>
-
 <body>
-<div>
-    <h1><%- examMetaData.title %></h1>
-    <p><%- examMetaData.duration %></p>
-</div>
-
-    <!-- Further code here -->
     <div class="start-screen">
-        <button id="start-btn" data-accessToken="<%- examMetaData.accessToken %>">Start</button>
+        <button id="start-btn" data-accessToken="<%= examMetaData.accessToken %>">Start Quiz</button>
+
+
     </div>
-    <div id="display-container" style="display: none;">
-        <div class="header">
-            <div class="number-of-count">
-                <span class="number-of-question">1 of 3 questions</span>
-            </div>
-            <div class="timer-div">
-                <img src="https://uxwing.com/wp-content/themes/uxwing/download/time-and-date/stopwatch-icon.png"
-                    width="20px" />
-                <span class="time-left">10s</span>
-            </div>
-        </div>
-        <div id="container">
-            <!-- questions and options will be displayed here -->
-        </div>
+
+
+    <div class="exam-header">
+        <h1><%- examMetaData.title %></h1>
+        <p><%- examMetaData.description %></p>
+    </div>
+
+    <div id="display-container" class="hide">
+        <div class="number-of-question"></div>
+        <div class="time-left">Time: 10s</div>
+        <div id="container"></div>
         <button id="next-button">Next</button>
     </div>
+
     <div class="score-container hide">
-        <div id="user-score">Demo Score</div>
-        <button id="restart">Restart</button>
+        <p id="user-score"></p>
     </div>
+
     <script src="/js/student/takeexam.js"></script>
 </body>
-
 </html>

@@ -9,6 +9,7 @@ const questionSchema = new mongoose.Schema({
   time: Number,
   score: Number,
   tolerance: Number,
+  answer: String,
   options: [{
     option: { type: String, required: true },
     correct: { type: Boolean, required: true, default: false }
@@ -21,7 +22,9 @@ const questionSchema = new mongoose.Schema({
     },
     default: null
   }
-}, { _id: false });
+}, 
+
+{ _id: false });
 
 const examSchema = new mongoose.Schema({
   teacher_id: {
