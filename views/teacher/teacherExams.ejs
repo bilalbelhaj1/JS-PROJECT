@@ -13,6 +13,7 @@
     border-radius: 16px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease;
+    max-width: 400px;
 }
 .exam-card h2{
     margin-bottom: 17px;
@@ -30,6 +31,7 @@
     font-weight: bold;
     padding: 4px 10px;
     border-radius: 8px;
+    margin-bottom: 20px;
 }
 
 .status.active {
@@ -52,6 +54,7 @@
     display: flex;
     justify-content: space-between;
     gap: 5px;
+    margin-top: 10px;
 }
 .exam-link input{
     flex: 4;
@@ -101,6 +104,10 @@
 .delete-btn:hover {
     background-color: #c82333;
 }
+.result{
+    color: #65b778;
+    margin-top: 10px;
+}
 
     </style>
     <%- include('sidebar.ejs') %>
@@ -108,8 +115,8 @@
         <div class="topbar">
             <h3>My Exams</h3>
             <div class="user-profile">
-                <img src="https://media.istockphoto.com/id/1345388323/vector/human-silhouette-isolated-vector-icon.jpg?s=612x612&w=0&k=20&c=a1wg9LYywdqDUG-t9rifrf16XEdWZbWe7ajuYxJTxEI=" alt="Teacher">
-                <span>Prof. <%- user.username %></span>
+                <img src="/img/<%- user.gendre %>-<%- user.role %>.png" alt="Teacher">
+                <span>Prof. <%- user.Fname %> <%- user.Lname %></span>
             </div>
         </div>
         <div class="exams-container">

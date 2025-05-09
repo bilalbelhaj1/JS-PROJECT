@@ -18,11 +18,13 @@ const app = express();
 
 // Configurations
 const PORT = process.env.PORT || 5000;
-const MONGO_URL = 'mongodb://localhost:27017/examdb';
+const Mongo_CLOUD = 'mongodb+srv://ayoubchaddad:fE0i6ALU14eCmn4K@cluster0.6dimacj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const MONGO_LOCAL = 'mongodb://localhost:27017/examdb';
 
 // Middleware
 app.use(express.json()); 
 app.use(express.static('public'));
+app.use(express.static('assets'));
 
 app.use(cookieParser());
 app.use(expressLayout);
@@ -36,7 +38,7 @@ app.use('/teacher', teacherRoute);
 app.use('/student', studentRoute); 
 
 // Connect to MongoDB and start the server
-mongoose.connect(MONGO_URL)
+mongoose.connect(MONGO_LOCAL)
     .then(() => {
         console.log('Connected to MongoDB');
         app.listen(PORT, () => {

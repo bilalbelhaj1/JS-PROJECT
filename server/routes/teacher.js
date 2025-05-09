@@ -5,20 +5,20 @@ import createExam from '../controllers/createExam.js';
 import teacherHome from '../controllers/teacherHome.js'
 import Exam from '../models/exams.js';
 
-const upload = multer({dest:'uploads/'});
+import upload from '../controllers/uploadFile.js';
 
 const router = express.Router();
 
 router.get('/home',authenticate, authorizeRole("Teacher"), teacherHome);
 
 router.get('/createExam',authenticate, authorizeRole("Teacher"), (req, res) =>{
-    res.render('teacher/createExam.ejs', { user: req.user });
+    res.render('teacher/createExam', { user: req.user, activePage: 'createExam' });
 })
 
-router.post('/createExam', authenticate, authorizeRole('Teacher'),upload.single('media'),createExam);
+router.post('/createExam', authenticate, authorizeRole('Teacher'),upload.any(),createExam);
 
 router.get('/myExams', authenticate, authorizeRole('Teacher'), (req, res)=>{
-    res.render('teacher/teacherExams',{user:req.user});
+    res.render('teacher/teacherExams', { user: req.user, activePage: 'myExams' });
 })
 
 router.post('/myExams', authenticate, authorizeRole('Teacher'),async (req,res)=>{

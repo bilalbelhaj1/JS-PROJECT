@@ -1,5 +1,38 @@
-<h2>WHERE STUDENT WILL TAKE THE EXAM</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exam Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/student/takeExam.css">
+  
+</head>
+<body>
 
-<button id="start-btn" data-accesToken="<%- examMetaData.accessToken %>">Start</button>
-<h1><%- examMetaData.title %></h1>
-<p><%- examMetaData.duration %></p>
+  <div class="exam-header">
+    <h1 id="exam-title"><%- examMetaData.title %></h1>
+    <div class="time-circle time-left">--</div>
+  </div>
+  <div class="exam-description">
+    <p id="exam-description-text">
+      Welcome to the <%- examMetaData.title %>. This test contains <%- examMetaData.questionsCount %>    questions and is timed. Read each question carefully before selecting your answer. Good luck!
+    </p>
+  </div>
+  <div class="start-screen">
+    <button id="start-btn" data-accessToken="<%- examMetaData.accessToken %>">Start Exam</button>
+  </div>
+  <div class="media">
+  </div>
+  <div id="display-container" class="hide">
+    <div id="container"></div>
+    <button id="next-button">Next</button>
+  </div>
+
+  <div class="score-container hide">
+    <p id="user-score"></p>
+  </div>
+
+  <script src="/js/student/takeExam.js"></script>
+</body>
+</html>

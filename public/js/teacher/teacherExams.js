@@ -42,9 +42,10 @@ function displayExams(exams){
                                 <span class="status ${exam.status}">${exam.status}</span>
                         </p>
                         <div class="exam-link">
-                          <input type="text" value="http://localhost:5000/teacher/${exam.accesstoken}">
-                          <button>c</button>
+                          <input type="text" value="http://localhost:5000/student/takeExam/${exam.accesstoken}">
+                          <button id="copyExamLink"><i class="fa-solid fa-copy"></i></button>
                         </div>
+                        <div class="result"></div>
                         <div class="card-actions">
                             <button class="statusBtn btn ${status}-btn" data-examId="${exam.examId}" id="${exam.status}">${status}</button>
                             <button class="btn delete-btn" data-examId="${exam.examId}" id="delete-exam">Delete</button>
@@ -54,6 +55,28 @@ function displayExams(exams){
     });
     examsDeletion();
     changeStatus();
+    copyExamLink();
+}
+
+function copyExamLink() {
+    document.querySelectorAll('#copyExamLink').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            let button = e.currentTarget; 
+            const input = button.previousElementSibling; 
+            input.select();
+            document.execCommand('copy');
+        });
+    });
+
+    const examCards = document.querySelectorAll('.exam-card');
+    examCards.forEach(examCard =>{
+        examCard.addEventListener('copy',()=>{
+            examCard.querySelector('.result').innerText = 'Copied';
+            setTimeout(()=>{
+                document.querySelector('.result').innerText = '';
+            },1000)
+        })
+    })
 }
 
 function examsDeletion(){
@@ -76,7 +99,7 @@ function deleteExam(examId){
     })
        .then(response=>{
             response.json().then(data=>{
-                //showAlert(data.message, data.type);
+                location.reload();
             })
        })
 }
