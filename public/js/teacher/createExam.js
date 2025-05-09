@@ -11,6 +11,10 @@ if (data) {
     window.location.href = '/teacher/home';
 }
 
+// Track question and option numbers globally
+let questionCounter = 1;
+const optionCounters = new Map(); // Using Map to track options per question
+
 document.addEventListener('DOMContentLoaded', () => {
     const examMetaData = JSON.parse(sessionStorage.getItem('examMetaData'));
     if (!examMetaData) {
@@ -45,6 +49,20 @@ function changeQuestionType(questionId, type) {
     }
 }
 
+// Update question numbers when questions are added/removed
+function updateQuestionNumbers() {
+    const questionCards = document.querySelectorAll('.question-card');
+    questionCounter = 1;
+    
+    questionCards.forEach((card, index) => {
+        const header = card.querySelector('.question-header h2');
+        const questionNumber = index + 1;
+        const buttonHtml = header.innerHTML.substring(header.innerHTML.indexOf('<button'));
+        header.innerHTML = `Question ${questionNumber} ${buttonHtml}`;
+        questionCounter++;
+    });
+}
+
 // Event delegation for question type changes
 document.addEventListener('click', function (e) {
     if (e.target.classList.contains('btn-direct')) {
@@ -62,18 +80,30 @@ document.addEventListener('click', function (e) {
     // Remove question
     if (e.target.classList.contains('remove-question-btn') || e.target.closest('.remove-question-btn')) {
         const questionCard = e.target.closest('.question-card');
+        const questionId = questionCard.getAttribute('data-question-id');
+        optionCounters.delete(questionId); // Remove options tracking for this question
         questionCard.remove();
+        updateQuestionNumbers();
     }
 
     // Add Option
     if (e.target.closest('.add-option')) {
         const questionCard = e.target.closest('.question-card');
+        const questionId = questionCard.getAttribute('data-question-id');
         const optionsContainer = questionCard.querySelector('.options-container');
-
+        
+        // Initialize counter for this question if not exists
+        if (!optionCounters.has(questionId)) {
+            optionCounters.set(questionId, 2); // Start with 2 because we already have 2 options
+        }
+        
+        const optionNumber = optionCounters.get(questionId) + 1;
+        optionCounters.set(questionId, optionNumber);
+        
         const newOption = document.createElement('div');
         newOption.classList.add('option-item');
         newOption.innerHTML = `
-            <input type="text" placeholder="New Option" class="option-input">
+            <input type="text" placeholder="Option ${optionNumber}" class="option-input" required>
             <input type="checkbox" class="option-correct">
             <button class="remove-option-btn"><i class="fas fa-trash"></i></button>
         `;
@@ -86,6 +116,7 @@ document.addEventListener('click', function (e) {
         const optionItem = button.closest('.option-item');
         if (optionItem) {
             optionItem.remove();
+            // Note: We're not decrementing the counter here to maintain numbering consistency
         }
     }
 });
@@ -93,10 +124,12 @@ document.addEventListener('click', function (e) {
 // Create a new question card
 function createQuestion() {
     const questionId = Date.now();
+    optionCounters.set(questionId, 2); // Initialize with 2 options
+    
     const QuestionHtml = `
     <div class="question-card" data-question-id="${questionId}">
         <div class="question-header">
-            <h2>New Question <button class="remove-question-btn"><i class="fas fa-trash"></i></button></h2>
+            <h2>Question ${questionCounter} <button class="remove-question-btn"><i class="fas fa-trash"></i></button></h2>
             <div class="question-type-toggle">
                 <button class="btn-direct active" data-type="direct">Direct Question</button>
                 <button class="btn-qcm" data-type="qcm">QCM</button>
@@ -159,6 +192,7 @@ function createQuestion() {
     
     const container = document.querySelector('.questions-container');
     container.insertAdjacentHTML('beforeend', QuestionHtml);
+    questionCounter++;
 
     // Add event listener for file selection
     const newCard = container.lastElementChild;
@@ -175,36 +209,70 @@ function createQuestion() {
     });
 }
 
-// Collect all questions data
+// Collect all questions data with proper validation
 function collectAllQuestions() {
     const questionCards = document.querySelectorAll('.question-card');
     const questions = [];
 
-    questionCards.forEach(card => {
+    let currentQuestionNumber = 1;
+    for (const card of questionCards) {
         const type = card.querySelector('.btn-direct').classList.contains('active') ? 'direct' : 'qcm';
         const enonce = card.querySelector('textarea').value.trim();
         const time = parseInt(card.querySelector('input[placeholder="30"]').value) || 0;
         const score = parseInt(card.querySelector('input[placeholder="5"]').value) || 0;
         const mediaFile = card.querySelector('.question-media').files[0];
 
+        if (!enonce) {
+            alert(`Please fill the text for Question ${currentQuestionNumber}`);
+            return null;
+        }
+
         if (type === 'direct') {
             const answer = card.querySelector('.direct-answer-section input[type="text"]').value.trim();
             const tolerance = parseInt(card.querySelector('.direct-answer-section input[type="number"]').value) || 0;
+
+            if (!answer) {
+                alert(`Please provide an answer for Direct Question ${currentQuestionNumber}`);
+                return null;
+            }
+
             questions.push({ enonce, type, time, score, tolerance, answer, mediaFile });
         } else {
             const options = [];
             const optionItems = card.querySelectorAll('.mcq-options-section .option-item');
-            optionItems.forEach(item => {
+            
+            let hasCorrect = false;
+            let currentOptionNumber = 1;
+            for (const item of optionItems) {
                 const text = item.querySelector('.option-input').value.trim();
                 const isCorrect = item.querySelector('.option-correct').checked;
-                if (text) { // Only include non-empty options
-                    options.push({ option: text, correct: isCorrect });
+                
+                if (!text) {
+                    alert(`Please fill Option ${currentOptionNumber} for QCM Question ${currentQuestionNumber}`);
+                    return null;
                 }
-            });
-            questions.push({ enonce, type, time, score, options, mediaFile });
+                
+                if (isCorrect) hasCorrect = true;
+                options.push({ option: text, correct: isCorrect, optionNumber: currentOptionNumber });
+                currentOptionNumber++;
+            }
+
+            if (!hasCorrect) {
+                alert(`Please select at least one correct option for QCM Question ${currentQuestionNumber}`);
+                return null;
+            }
+
+            if (options.length < 2) {
+                alert(`QCM Question ${currentQuestionNumber} must have at least 2 options`);
+                return null;
+            }
+
+            questions.push({ enonce, type, time, score, options, mediaFile, questionNumber: currentQuestionNumber });
         }
-    });
-    
+
+        currentQuestionNumber++;
+    }
+
     return questions;
 }
 
@@ -249,24 +317,10 @@ function showExamLink(accessToken) {
 // Save exam to database
 document.getElementById('save-exam-btn').addEventListener('click', async () => {
     const questions = collectAllQuestions();
+    if (!questions) return; // Validation failed
+    
     const examMetaData = JSON.parse(sessionStorage.getItem('examMetaData'));
     
-    // Validate required fields
-    for (const question of questions) {
-        if (!question.enonce) {
-            alert('Please fill in all question texts');
-            return;
-        }
-        if (question.type === 'direct' && !question.answer) {
-            alert('Please fill in all answer fields for direct questions');
-            return;
-        }
-        if (question.type === 'qcm' && question.options.length < 2) {
-            alert('Each QCM question must have at least 2 options');
-            return;
-        }
-    }
-
     // Validate total time and score
     const expectedDuration = examMetaData.duration * 60;
     const expectedScore = 20;
@@ -299,6 +353,10 @@ document.getElementById('save-exam-btn').addEventListener('click', async () => {
     const questionsData = questions.map(q => {
         const questionData = { ...q };
         delete questionData.mediaFile; // Remove the File object
+        delete questionData.questionNumber; // Remove tracking numbers before sending
+        if (questionData.options) {
+            questionData.options.forEach(opt => delete opt.optionNumber);
+        }
         return questionData;
     });
     formData.append('questions', JSON.stringify(questionsData));
@@ -313,7 +371,7 @@ document.getElementById('save-exam-btn').addEventListener('click', async () => {
     try {
         const response = await fetch('/teacher/createExam', {
             method: 'POST',
-            body: formData // No Content-Type header needed for FormData
+            body: formData
         });
         
         if (response.ok) {

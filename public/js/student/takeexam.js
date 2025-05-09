@@ -1,5 +1,5 @@
+let Exam;
 document.querySelector("#start-btn").addEventListener("click", () => {
-  let Exam;
   const accessToken = document.querySelector('#start-btn').getAttribute('data-accessToken');
 
   fetch(`/student/takingExam/${accessToken}`, {
@@ -11,17 +11,19 @@ document.querySelector("#start-btn").addEventListener("click", () => {
   })
   .then(response => {
       if (response.ok) {
-          console.log("Request ok");
           response.json().then(data => {
-              console.log(data);
               Exam = data;
               document.querySelector(".exam-header h1").innerText = Exam.title;
               document.querySelector(".start-screen").classList.add("hide");
               document.getElementById("display-container").classList.remove("hide");
               document.getElementById('exam-description-text').innerHTML = Exam.description;
-
               takingExam(Exam);
           });
+      }else{
+         response.json().then(data=>{
+            alert(data.message);
+            location.href = '/student/home';
+         })
       }
   });
 });
@@ -57,7 +59,29 @@ nextBtn.addEventListener("click", () => {
       document.getElementById("display-container").classList.add("hide");
       scoreContainer.classList.remove("hide");
       document.querySelector('.media').innerHTML = '';
-      userScore.innerHTML =` Your score is ${scoreCount} out of ${totalPossibleScore()}`;
+      userScore.innerHTML = `Your score is ${scoreCount} out of ${totalPossibleScore()}`;
+
+      const StudentStats = {
+          examAccessToken: Exam.accessToken,
+          title: Exam.title,
+          score: scoreCount
+      };
+      setTimeout(() => {
+          fetch('/student/saveStats', {
+              method: "POST",
+              headers: {
+                  'Content-Type': 'Application/json'
+              },
+              body: JSON.stringify({ StudentStats })
+          })
+          .then(response => {
+              if (response.ok) {
+                  location.href = '/student/home';
+              } else {
+                  console.log("Error");
+              }
+          });
+      }, 2000);
   } else {
       quizDisplay(questionCount);
       startTimer(quizArray[questionCount].time || 10);
@@ -71,7 +95,7 @@ nextBtn.addEventListener("click", () => {
 function startTimer(time) {
   clearInterval(countdown);
   let count = time;
-  timeLeft.innerText =` ${count}s`;
+  timeLeft.innerText = `${count}s`;
   countdown = setInterval(() => {
       count--;
       timeLeft.innerText = `${count}s`;
@@ -86,6 +110,34 @@ function quizDisplay(index) {
   let cards = document.querySelectorAll(".container-mid");
   cards.forEach(card => card.classList.add("hide"));
   cards[index].classList.remove("hide");
+
+  // Handle media
+  const mediaContainer = document.querySelector('.media');
+  mediaContainer.innerHTML = ''; // Clear previous media
+
+  const currentQuestion = quizArray[index];
+
+  if (currentQuestion.media) {
+      mediaContainer.style.display = 'block';
+
+      if (currentQuestion.media.fileType === 'image') {
+          const image = document.createElement('img');
+          image.src = currentQuestion.media.filePath;
+          mediaContainer.appendChild(image);
+      } else if (currentQuestion.media.fileType === 'video') {
+          const video = document.createElement('video');
+          video.src = currentQuestion.media.filePath;
+          video.controls = true;
+          mediaContainer.appendChild(video);
+      } else if (currentQuestion.media.fileType === 'audio') {
+          const audio = document.createElement('audio');
+          audio.src = currentQuestion.media.filePath;
+          audio.controls = true;
+          mediaContainer.appendChild(audio);
+      }
+  } else {
+      mediaContainer.style.display = 'none';
+  }
 }
 
 function quizCreator() {
@@ -99,29 +151,6 @@ function quizCreator() {
       questionP.classList.add("question");
       questionP.innerText = i.enonce;
       div.appendChild(questionP);
-
-      // Each question has its OWN media
-      if (i.media !== null) {
-          const mediaContainer = document.querySelector('.media');
-          mediaContainer.innerHTML = '';
-          mediaContainer.style.display = 'block';
-
-          if (i.media.fileType === 'image') {
-              const image = document.createElement('img');
-              image.src = i.media.filePath;
-              mediaContainer.appendChild(image);
-          } else if (i.media.fileType === 'video') {
-              const video = document.createElement('video');
-              video.src = i.media.filePath;
-              video.controls = true;
-              mediaContainer.appendChild(video);
-          } else if (i.media.fileType === 'audio') {
-              const audio = document.createElement('audio');
-              audio.src = i.media.filePath;
-              audio.controls = true;
-              mediaContainer.appendChild(audio);
-          }
-      }
 
       if (i.type === "qcm") {
           i.options.sort(() => Math.random() - 0.5);
@@ -155,7 +184,6 @@ function checker(button, isCorrect, questionScore) {
       button.classList.add("incorrect");
   }
 
-  // Show correct option(s)
   options.forEach(btn => {
       const correctOption = quizArray[questionCount].options.find(o => o.option === btn.innerText && o.correct);
       if (correctOption) btn.classList.add("correct");

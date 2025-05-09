@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home Page</title>
+  <link rel="stylesheet" href="/css/student/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<style>
+  .examLink{
+    width: 80%;
+    max-width: 800px;
+    height: 47px;
+    margin: 0 auto;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .examLink input{
+    flex: 4;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    padding-left: 20px;
+    font-size: 18px;
+    border: none;
+    outline: none;
+  }
+  .examLink button{
+    width: 80px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 500;
+    background: var(--primary);
+  }
+</style>
+<body>
+  <div class="container">
+      <div class="welcome-section">
+          <h2>Welcome Back, <%- user.username %>!</h2>
+      </div>
+  </div>
+  <div class="examLink">
+    <input type="text" placeholder="Enter the Exam Link">
+    <button id="takeExamBtn">Take</button>
+  </div>
+  <div class="dashboard-container">
+    <div class="chart-row">
+      <div class="chart-card">
+        <canvas id="highestChart"></canvas>
+        <p class="chart-label">Highest</p>
+      </div>
+      <div class="chart-card">
+        <canvas id="lowestChart"></canvas>
+        <p class="chart-label">Lowest</p>
+      </div>
+      <div class="chart-card">
+        <canvas id="meanChart"></canvas>
+        <p class="chart-label">Mean</p>
+      </div>
+    </div>
+    
+
+    <table>
+      <thead>
+        <tr>
+          <th>Exam Title</th>
+          <th>Score</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="exam-table-body">
+        <!-- Data rows go here -->
+      </tbody>
+    </table>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  <script src="/js/student/dashboard.js"></script>
+  <script>
+    function takeExam(){
+      const Link = document.querySelector('.examLink input').value;
+      location.href = Link;
+    }
+    document.getElementById('takeExamBtn').addEventListener('click',()=>{
+      takeExam();
+    })
+    const Link = document.querySelector('.examLink input').addEventListener('keyup',(e)=>{
+      if(e.code === 'Enter'){
+        takeExam();
+      }
+    })
+  </script>
+</body>
+</html>

@@ -22,26 +22,6 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-@keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes pop {
-    0% {
-        transform: scale(0.95);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -160,8 +140,74 @@ body {
     cursor: pointer;
 }
 
+.dropDownn-toggle{
+    width: 90px;
+    padding: 10px 7px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 13px;
+    border: 2px solid var(--primary);
+    font-size: 21px;
+    color: #37c987;
+}
+
+.dropdown-menu{
+    position: fixed;
+    top: 60px;
+    right: 9px;
+    background: #fff;
+    padding: 10px;
+    width: 130px;
+    height: 120px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    z-index: 9999999;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-menu-sideBar{
+    background: #fff;
+    padding: 10px;
+    width: 130px;
+    height: 120px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    z-index: 9999999;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-menu.show, .dropdown-menu-sideBar.show{
+    display: none;
+}
+
+.dropdown-menu a,.dropdown-menu-sideBar a{
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 18px;
+}
+.dropdown-menu a#profile,.dropdown-menu-sideBar a#profile{
+    background: #e8f0fe;
+    color: #474141;
+}
+
+.dropdown-menu a#logout, .dropdown-menu-sideBar a#logout{
+    background: var(--danger);
+    color: #fff;
+}
+
+/* Hero Section */
 .hero {
-    background: linear-gradient(120deg, var(--primary), var(--secondary));
+    background-image: url('https://examonline.in/wp-content/uploads/2022/08/featured1.png') ;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
     padding: 50px 30px;
     min-height: 60vh;
     display: flex;
@@ -260,7 +306,6 @@ body {
     font-size: 30px;
     color: var(--primary);
 }
-
 .what-says {
     padding: 40px;
     background: rgba(238, 239, 247, 0.288);
@@ -343,4 +388,3 @@ footer {
         width: 100%;
     }
 }
-
