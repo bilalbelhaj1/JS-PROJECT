@@ -7,6 +7,7 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Storage configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, '../../assets/uploads/'));
@@ -17,21 +18,37 @@ const storage = multer.diskStorage({
   }
 });
 
+// File filter configuration
 const fileFilter = (req, file, cb) => {
-  const filetypes = /jpeg|jpg|png|gif|mp4|webm|ogg|mp3|wav/;
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = filetypes.test(file.mimetype);
+  const allowedMimes = [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/gif',
+    'video/mp4',
+    'video/webm',
+    'video/ogg',
+    'audio/mpeg',  // .mp3
+    'audio/wav',   // .wav
+    'audio/ogg'    // .ogg
+  ];
+
+  const allowedExts = /jpeg|jpg|png|gif|mp4|webm|ogg|mp3|wav/;
+
+  const extname = allowedExts.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = allowedMimes.includes(file.mimetype);
 
   if (mimetype && extname) {
-    return cb(null, true);
+    cb(null, true);
   } else {
-    cb('Error: Only media files are allowed!');
+    cb(new Error('Error: Only media files (images, videos, audios) are allowed!'));
   }
 };
 
+// Multer upload instance
 const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
   fileFilter
 });
 

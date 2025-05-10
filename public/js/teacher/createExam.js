@@ -333,7 +333,7 @@ document.getElementById('save-exam-btn').addEventListener('click', async () => {
     });
 
     if (totalTime !== expectedDuration) {
-        alert(`The total time (${totalTime}s) does not match the required duration (${expectedDuration}s).`);
+        showAlert(`The total time (${totalTime}s) does not match the required duration (${expectedDuration}s).`, 'danger');
         return;
     }
 

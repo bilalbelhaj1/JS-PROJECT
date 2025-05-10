@@ -1,7 +1,10 @@
 <div class="dashboard">
     <%- include('sidebar.ejs') %>
     <div class="main-content">
-        <div id="alert-message" class="alert alert-success" style="display: none;">FUCKED UP</div>
+        <div id="alert-message" class="alert" style="display: none;">
+          <span id="alert-text"></span>
+          <button id="alert-close" class="alert-close-btn">&times;</button>
+        </div>
         <div class="topbar">
             <h3>Add Questions to: <span style="color: var(--primary);" id="js-exam-title"></span></h3>
             <div class="user-profile">
@@ -35,4 +38,5 @@
   </div>
 </div>
 </div>
+<script src="/js/utils.js"></script>
 <script src="/js/teacher/createExam.js"></script>

@@ -1,0 +1,57 @@
+.alert {
+    padding: 12px 20px;
+    border-radius: 8px;
+    position: fixed;
+    top: 20px;
+    left: 40%;
+    transform: translateX(-50%);
+    min-width: 250px;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 9999;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.alert-success {
+    background-color: rgba(106, 188, 100, 0.8);
+    color: #2e5d24;
+    border: 1px solid var(--success, #6abc64);
+}
+
+.alert-danger {
+    background-color: rgba(255, 51, 51, 0.2);
+    color: var(--danger, #ff3333);
+    border: 1px solid var(--danger, #ff3333);
+}
+
+.alert-info {
+    background-color: rgba(0, 123, 255, 0.2);
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.alert-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    color: inherit;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* Hidden state */
+.alert-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-20px);
+}
+
+.alert-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}

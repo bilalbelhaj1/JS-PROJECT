@@ -2,7 +2,10 @@
     <link rel="stylesheet" href="/css/profile.css">
     <%- include('sidebar.ejs') %>
     <div class="container">
-        <div id="alert-message" class="alert" style="display: none;"></div>
+        <div id="alert-message" class="alert" style="display: none;">
+        <span id="alert-text"></span>
+        <button id="alert-close" class="alert-close-btn">&times;</button>
+        </div>
         <div class="profile-header">
             <h1>Profile Settings</h1>
         </div>
