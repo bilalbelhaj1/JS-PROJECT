@@ -1,70 +1,95 @@
 <link rel="stylesheet" href="/css/profile.css">
-    <div class="container">
-        <div id="alert-message" class="alert" style="display: none;"></div>
-        <div class="profile-header">
-            <h1>Profile Settings</h1>
-        </div>
-        <div id="alert-message" class="alert" style="display: none;"></div>
+<style>
+    .container-student{
+        padding: 40px;
+        max-width: 800px;
+        margin: 10px auto;
+    }
+    .btn-primary {
+    background-color: #3b82f6;
+    color: white;
+        }
 
-        <div class="profile-card">
-            <h2>Profile Information</h2>
-            
-            <div class="profile-picture">
-                <img src="/img/<%- user.gendre %>-<%- user.role %>.png" alt="Profile Picture" id="profile-img">
+    .btn-primary:hover {
+        background-color: #1e40af;
+    }
+    .profile-picture img{
+        border: 3px solid #60a5fa;
+    }
+    .form-control:focus{
+        border-color:#60a5fa ;
+    }
+    .profile-card h2{
+        border-bottom: 2px solid #60a5fa;
+    }
+</style>
+<div class="container-student">
+    <div id="alert-message" class="alert" style="display: none;">
+          <span id="alert-text"></span>
+          <button id="alert-close" class="alert-close-btn">&times;</button>
+        </div>
+    <div class="profile-header">
+        <h1>Paramètres du profil</h1>
+    </div>
+    <div class="profile-card">
+        <h2>Informations du profil</h2>
+
+        <div class="profile-picture">
+            <img src="/img/<%- user.gender %>-<%- user.role %>.png" alt="Photo de profil" id="profile-img">
+        </div>
+
+        <form id="profile-form">
+            <div class="form-group">
+                <label for="name">Nom d'utilisateur</label>
+                <input type="text" id="name" class="form-control" value="<%- user.username %>">
             </div>
 
-            <form id="profile-form">
-                <div class="form-group">
-                    <label for="name">Username</label>
-                    <input type="text" id="name" class="form-control" value="<%- user.username %>">
+            <div class="form-group">
+                <label for="email">Adresse e-mail</label>
+                <input type="email" id="email" class="form-control" value="<%- user.email %>">
+            </div>
+            <button type="submit" class="btn btn-primary">Sauvegarder les modifications</button>
+        </form>
+    </div>
+
+    <div class="profile-card">
+        <h2>Paramètres du mot de passe</h2>
+        <p>Changez votre mot de passe ici. Assurez-vous qu'il est fort et sécurisé.</p>
+        <button id="change-password-btn" class="btn btn-outline">Changer le mot de passe</button>
+    </div>
+</div>
+
+<div class="modal" id="password-modal">
+    <div class="modal-content">
+        <button class="close-btn" id="close-modal">&times;</button>
+        <div class="modal-header">
+            <h3>Changer le mot de passe</h3>
+        </div>
+        <div class="modal-body">
+            <form id="password-form">
+                <div class="form-group password-toggle">
+                    <label for="current-password">Mot de passe actuel</label>
+                    <input type="password" id="current-password" class="form-control" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" class="form-control" value="<%- user.email %>">
+                <div class="form-group password-toggle">
+                    <label for="new-password">Nouveau mot de passe</label>
+                    <input type="password" id="new-password" class="form-control" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+
+                <div class="form-group password-toggle">
+                    <label for="confirm-password">Confirmer le nouveau mot de passe</label>
+                    <input type="password" id="confirm-password" class="form-control" required>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="cancel-password">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Mettre à jour le mot de passe</button>
+                </div>
             </form>
         </div>
-
-        <div class="profile-card">
-            <h2>Password Settings</h2>
-            <p>Change your password here. Make sure it's strong and secure.</p>
-            <button id="change-password-btn" class="btn btn-outline">Change Password</button>
-        </div>
     </div>
-
-    <div class="modal" id="password-modal">
-        <div class="modal-content">
-            <button class="close-btn" id="close-modal">&times;</button>
-            <div class="modal-header">
-                <h3>Change Password</h3>
-            </div>
-            <div class="modal-body">
-                <form id="password-form">
-                    <div class="form-group password-toggle">
-                        <label for="current-password">Current Password</label>
-                        <input type="password" id="current-password" class="form-control" required>
-                    </div>
-
-                    <div class="form-group password-toggle">
-                        <label for="new-password">New Password</label>
-                        <input type="password" id="new-password" class="form-control" required>
-                    </div>
-
-                    <div class="form-group password-toggle">
-                        <label for="confirm-password">Confirm New Password</label>
-                        <input type="password" id="confirm-password" class="form-control" required>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline" id="cancel-password">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Update Password</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+</div>
 </div>
 <script src="/js/utils.js"></script>
 <script src="/js/profile.js"></script>

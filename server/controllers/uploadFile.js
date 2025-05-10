@@ -41,14 +41,14 @@ const fileFilter = (req, file, cb) => {
   if (mimetype && extname) {
     cb(null, true);
   } else {
-    cb(new Error('Error: Only media files (images, videos, audios) are allowed!'));
+    cb(new Error('Erreur : Seuls les fichiers multimédia (images, vidéos, audios) sont autorisés !'));
   }
 };
 
 // Multer upload instance
 const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  limits: { fileSize: 10 * 1024 * 1024 }, // Limite de 10 Mo
   fileFilter
 });
 

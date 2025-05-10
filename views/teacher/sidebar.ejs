@@ -1,14 +1,11 @@
 <div class="sidebar">
-    <div class="sidebar-header">
-        <i class="fas fa-graduation-cap"></i>
-        <h2>Teacher Dashboard</h2>
-    </div>
+    
     <ul class="sidebar-menu">
-        <li><a href="/teacher/home" class="<%= activePage === 'home' ? 'active' : '' %>"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li><a href="/teacher/createExam" id="create-exam-btn" class="<%= activePage === 'createExam' ? 'active' : '' %>"><i class="fas fa-plus-circle"></i> Create Exam</a></li>
-        <li><a href="/teacher/myExams" class="<%= activePage === 'myExams' ? 'active' : '' %>"><i class="fas fa-list-alt"></i> My Exams</a></li>
+        <li><a href="/teacher/home" class="<%= activePage === 'home' ? 'active' : '' %>"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a></li>
+        <li><a href="/teacher/createExam" id="create-exam-btn" class="<%= activePage === 'createExam' ? 'active' : '' %>"><i class="fas fa-plus-circle"></i> Créer un examen</a></li>
+        <li><a href="/teacher/myExams" class="<%= activePage === 'myExams' ? 'active' : '' %>"><i class="fas fa-list-alt"></i> Mes examens</a></li>
 
-        <li><a href="/auth/profile" class="<%= activePage === 'profile' ? 'active' : '' %>"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="/auth/profile" class="<%= activePage === 'profile' ? 'active' : '' %>"><i class="fas fa-cog"></i> Paramètres</a></li>
     </ul>
 </div>
 <script src="/public/js/teacher/sidebar.js"></script>

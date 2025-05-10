@@ -1,38 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Exam Page</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title><%- examMetaData.title %> | Examen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/student/takeExam.css">
-  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+  <link rel="stylesheet" href="/css/showAlert.css">
 </head>
 <body>
-
   <div class="exam-header">
     <h1 id="exam-title"><%- examMetaData.title %></h1>
-    <div class="time-circle time-left">--</div>
+    <div class="time-circle time-left" aria-label="Temps restant">--</div>
   </div>
+  <div id="alert-message" class="alert" style="display: none;">
+          <span id="alert-text"></span>
+          <button id="alert-close" class="alert-close-btn">&times;</button>
+        </div>
+
   <div class="exam-description">
     <p id="exam-description-text">
-      Welcome to the <%- examMetaData.title %>. This test contains <%- examMetaData.questionsCount %>    questions and is timed. Read each question carefully before selecting your answer. Good luck!
+      Bienvenue dans le test <strong><%- examMetaData.title %></strong>. Ce test contient 
+      <strong><%- examMetaData.questionsCount %> questions</strong> et est chronométré. 
+      Lisez attentivement chaque question avant de sélectionner votre réponse. Bonne chance !
     </p>
   </div>
+
   <div class="start-screen">
-    <button id="start-btn" data-accessToken="<%- examMetaData.accessToken %>">Start Exam</button>
+    <div class="media"></div>
+    <button id="start-btn" class="btn" data-accessToken="<%- examMetaData.accessToken %>">
+      Démarrer l'examen
+    </button>
   </div>
-  <div class="media">
-  </div>
+
   <div id="display-container" class="hide">
-    <div id="container"></div>
-    <button id="next-button">Next</button>
+    <div class="progress-container">
+      <div class="question-count">
+        Question <span id="current-question">1</span> sur <span id="total-questions"><%- examMetaData.questionsCount %></span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" id="progress-bar"></div>
+      </div>
+    </div>
+    
+    <div id="container">
+  <div class="question-container">
+    <div class="media"></div>
+    <p class="question-text" id="question"></p>
+    <div id="options-container"></div>
+  </div>
+</div>
+
+    
+    <button id="next-button" class="btn">Question suivante →</button>
   </div>
 
   <div class="score-container hide">
-    <p id="user-score"></p>
+    <h2>Votre score</h2>
+    <div class="score-value" id="user-score">0</div>
+    <p id="score-message"></p>
   </div>
 
+  <div id="geo-modal" class="hide">
+    <div class="geo-modal-content">
+      <p id="geo-modal-text"></p>
+      <button id="geo-modal-btn" class="btn">Recharger la page</button>
+    </div>
+  </div>
+  <script src="/js/utils.js"></script>
   <script src="/js/student/takeExam.js"></script>
 </body>
 </html>

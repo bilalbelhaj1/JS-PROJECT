@@ -1,33 +1,33 @@
 document.getElementById("loginForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent the form from submitting the traditional way
+    event.preventDefault(); // Empêcher l'envoi par défaut
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const errorDiv = document.querySelector(".error-displayer");
-    errorDiv.innerText = ""; // Clear previous error messages
+    errorDiv.innerText = ""; // Vider les anciens messages
     errorDiv.style.color = 'red';
-    // Perform validation
+
+    // Validation de base
     if (email === "" || password === "") {
         errorDiv.style.display = 'block';
-        errorDiv.style.color = 'red';
-        errorDiv.innerText = "Please fill in all fields."; // Show error message
-        return;
-    }
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
-        errorDiv.style.display = 'block';
-        errorDiv.style.color = 'red';
-        errorDiv.innerText = 'Please enter a valid email address.'; // show error message
-        return;
-    }
-    if (password.length <= 8) {
-        errorDiv.style.display = 'block';
-        errorDiv.style.color = 'red';
-        errorDiv.innerText = 'Password must be at least 8 characters long.'; // show error message
+        errorDiv.innerText = "Veuillez remplir tous les champs.";
         return;
     }
 
-    // Prepare data to send
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        errorDiv.style.display = 'block';
+        errorDiv.innerText = "Veuillez entrer une adresse e-mail valide.";
+        return;
+    }
+
+    if (password.length < 8) {
+        errorDiv.style.display = 'block';
+        errorDiv.innerText = "Le mot de passe doit contenir au moins 8 caractères.";
+        return;
+    }
+
+    // Préparer les données à envoyer
     const data = { email, password };
 
     fetch('/auth/login', {
@@ -41,34 +41,29 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
         const result = await response.json();
 
         if (response.status === 200 || response.status === 201) {
-            // Success
-            
+            // Succès
             if (result.token) {
-                //localStorage.setItem('authToken', result.token);
-                console.log(result);
                 document.cookie = `authToken=${result.token}; path=/; max-age=86400`;
-                window.location.href = result.url;
             }
             if (result.url) {
-                window.location.href = result.url; // Redirect to the URL provided in the response
+                window.location.href = result.url; // Redirection
             } else {
                 errorDiv.style.color = 'green';
                 errorDiv.style.display = 'block';
-                errorDiv.innerText = result.message || 'Login successful.';
+                errorDiv.innerText = result.message || "Connexion réussie.";
             }
+            document.getElementById('loginForm').reset(); // Vider le formulaire après réussite
         } else {
-            // Handle 400, 401, 500, etc.
+            // Gérer les erreurs (400, 401, 500, etc.)
             errorDiv.style.display = 'block';
             errorDiv.style.color = 'red';
-            errorDiv.innerText = result.message || 'Login failed.';
+            errorDiv.innerText = result.message || "Échec de la connexion.";
         }
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('Erreur:', error);
         errorDiv.style.display = 'block';
         errorDiv.style.color = 'red';
-        errorDiv.innerText = 'Something went wrong. Please try again later.';
+        errorDiv.innerText = "Une erreur est survenue. Veuillez réessayer plus tard.";
     });
-
-    document.getElementById('loginForm').reset();
 });

@@ -27,7 +27,6 @@
     font-size: 22px;
     margin-bottom: 20px;
     color: var(--dark);
-    border-bottom: 2px solid var(--primary);
     padding-bottom: 10px;
 }
 
@@ -52,7 +51,6 @@
 }
 
 .form-control:focus {
-    border-color: var(--primary);
     outline: none;
     box-shadow: 0 0 0 3px rgba(67, 238, 161, 0.2);
 }
@@ -65,15 +63,6 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
-}
-
-.btn-primary {
-    background-color: var(--primary);
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: var(--secondary);
 }
 
 .btn-outline {
@@ -98,7 +87,6 @@
     border-radius: 50%;
     object-fit: cover;
     margin-right: 20px;
-    border: 3px solid var(--primary);
 }
 .modal {
     display: none;

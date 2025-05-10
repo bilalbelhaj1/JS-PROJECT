@@ -4,32 +4,29 @@ import Exam from '../models/exams.js'
 
 const router = express.Router();
 
-router.get('/',async (req, res)=>{
+router.get('/', async (req, res) => {
     const token = req.cookies.authToken;
-    if(!token){
+    if (!token) {
         res.render('index');
-    }else{
+    } else {
         const decoded = jwt.verify(token, process.env.JWT_SECRET || '4sUgd85m6mAr5DCH');
-        if(decoded.role.toLowerCase() === 'teacher'){
+        if (decoded.role.toLowerCase() === 'teacher') {
             const teacherId = decoded.userId;
-                const exams = await Exam.find({teacher_id:teacherId})
-                const totalExams = exams.length;
-                let createdQuestions = 0;
-                console.log(exams);
-                let activeExams = 0;
-                if(totalExams !== 0){
-                    activeExams = exams.map(e=>e.status === 'active').length;
-                    exams.forEach(e=>{
-                        createdQuestions += e.questions.length;
-                    })
-                }
-                const examsStatistic = {totalExams, activeExams, createdQuestions};
-                console.log(examsStatistic);
-                res.render('teacher/home', { user: decoded,examsStatistic,activePage: 'home' });
-        }else{
-            res.render('student/dashboard',{user : decoded});
+            const exams = await Exam.find({ teacher_id: teacherId })
+            const totalExams = exams.length;
+            let createdQuestions = 0;
+            let activeExams = 0;
+            if (totalExams !== 0) {
+                activeExams = exams.map(e => e.status === 'active').length;
+                exams.forEach(e => {
+                    createdQuestions += e.questions.length;
+                })
+            }
+            const examsStatistic = { totalExams, activeExams, createdQuestions };
+            res.render('teacher/home', { user: decoded, examsStatistic, activePage: 'home' });
+        } else {
+            res.render('student/dashboard', { user: decoded });
         }
-        /* res.render(`${decoded.role.toLowerCase()}/home`, { user: decoded }) */
     }
 })
 

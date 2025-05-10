@@ -5,7 +5,6 @@ if (data) {
     var title = data.title;
     var description = data.description;
     var group = data.group;
-    var duration = data.duration;
 } else {
     console.error("No examMetaData found in sessionStorage.");
     window.location.href = '/teacher/home';
@@ -13,7 +12,7 @@ if (data) {
 
 // Track question and option numbers globally
 let questionCounter = 1;
-const optionCounters = new Map(); // Using Map to track options per question
+const optionCounters = new Map(); 
 
 document.addEventListener('DOMContentLoaded', () => {
     const examMetaData = JSON.parse(sessionStorage.getItem('examMetaData'));
@@ -102,11 +101,11 @@ document.addEventListener('click', function (e) {
         
         const newOption = document.createElement('div');
         newOption.classList.add('option-item');
-        newOption.innerHTML = `
-            <input type="text" placeholder="Option ${optionNumber}" class="option-input" required>
+        newOption.innerHTML = 
+            `<input type="text" placeholder="Option ${optionNumber}" class="option-input" required>
             <input type="checkbox" class="option-correct">
-            <button class="remove-option-btn"><i class="fas fa-trash"></i></button>
-        `;
+            <button class="remove-option-btn"><i class="fas fa-trash"></i></button>`
+        ;
         optionsContainer.appendChild(newOption);
     }
     
@@ -126,40 +125,40 @@ function createQuestion() {
     const questionId = Date.now();
     optionCounters.set(questionId, 2); // Initialize with 2 options
     
-    const QuestionHtml = `
-    <div class="question-card" data-question-id="${questionId}">
+    const QuestionHtml = 
+    `<div class="question-card" data-question-id="${questionId}">
         <div class="question-header">
             <h2>Question ${questionCounter} <button class="remove-question-btn"><i class="fas fa-trash"></i></button></h2>
             <div class="question-type-toggle">
-                <button class="btn-direct active" data-type="direct">Direct Question</button>
+                <button class="btn-direct active" data-type="direct">Question directe</button>
                 <button class="btn-qcm" data-type="qcm">QCM</button>
             </div>
         </div>
         <div class="form-group">
-            <label>Question Text</label>
-            <textarea class="form-control" rows="3" placeholder="Enter your question..." required></textarea>
+            <label>Texte de la question</label>
+            <textarea class="form-control" rows="3" placeholder="Entrez votre question..." required></textarea>
         </div>
         <div class="media-upload">
             <label class="media-upload-btn"> 
-                <i class="fa-solid fa-upload"></i> Upload
+                <i class="fa-solid fa-upload"></i> Télécharger
                 <input type="file" class="question-media" accept="image/*, audio/*, video/*">
             </label>
-            <span class="file-name">No file selected</span>
+            <span class="file-name">Aucun fichier sélectionné</span>
         </div>
         <div class="direct-answer-section">
             <div class="form-group">
-                <label>Correct Answer</label>
-                <input type="text" class="form-control" placeholder="Expected answer" required>
+                <label>Réponse correcte</label>
+                <input type="text" class="form-control" placeholder="Réponse attendue" required>
             </div>
             <div class="form-group">
-                <label>Tolerance (%)</label>
+                <label>Tolérance (%)</label>
                 <input type="number" class="form-control" placeholder="10" min="0" max="100" required>
-                <small>Percentage of allowed variation in student answers (e.g., for typos).</small>
+                <small>Pourcentage de variation autorisé dans les réponses des étudiants (ex: pour les fautes de frappe).</small>
             </div>
         </div>
         <div class="mcq-options-section" style="display: none;">
             <div class="form-group">
-                <label>Options (Check correct answers)</label>
+                <label>Options (Cocher les bonnes réponses)</label>
                 <div class="options-container">
                     <div class="option-item">
                         <input type="text" placeholder="Option 1" class="option-input" required>
@@ -174,7 +173,7 @@ function createQuestion() {
                 </div>
                 <div class="add-option">
                     <i class="fas fa-plus-circle"></i>
-                    <span>Add Option</span>
+                    <span>Ajouter une option</span>
                 </div>
             </div>
         </div>
@@ -184,7 +183,7 @@ function createQuestion() {
                 <input type="number" class="form-control" placeholder="5" min="1" required>
             </div>
             <div class="form-group">
-                <label>Time Limit (seconds)</label>
+                <label>Durée (secondes)</label>
                 <input type="number" class="form-control" placeholder="30" min="5" required>
             </div>
         </div>
@@ -200,7 +199,7 @@ function createQuestion() {
     const fileNameDisplay = newCard.querySelector('.file-name');
     
     fileInput.addEventListener('change', function() {
-        fileNameDisplay.textContent = this.files[0] ? this.files[0].name : 'No file selected';
+        fileNameDisplay.textContent = this.files[0] ? this.files[0].name : 'Aucun fichier sélectionné';
     });
 
     window.scrollTo({
@@ -223,7 +222,7 @@ function collectAllQuestions() {
         const mediaFile = card.querySelector('.question-media').files[0];
 
         if (!enonce) {
-            alert(`Please fill the text for Question ${currentQuestionNumber}`);
+            showAlert(`Veuillez remplir le texte pour la Question ${currentQuestionNumber}`, 'danger');
             return null;
         }
 
@@ -232,7 +231,7 @@ function collectAllQuestions() {
             const tolerance = parseInt(card.querySelector('.direct-answer-section input[type="number"]').value) || 0;
 
             if (!answer) {
-                alert(`Please provide an answer for Direct Question ${currentQuestionNumber}`);
+                showAlert(`Veuillez fournir une réponse pour la Question directe ${currentQuestionNumber}`, 'danger');
                 return null;
             }
 
@@ -248,7 +247,7 @@ function collectAllQuestions() {
                 const isCorrect = item.querySelector('.option-correct').checked;
                 
                 if (!text) {
-                    alert(`Please fill Option ${currentOptionNumber} for QCM Question ${currentQuestionNumber}`);
+                    showAlert(`Veuillez remplir l'Option ${currentOptionNumber} pour la Question QCM ${currentQuestionNumber}`, 'danger');
                     return null;
                 }
                 
@@ -258,12 +257,12 @@ function collectAllQuestions() {
             }
 
             if (!hasCorrect) {
-                alert(`Please select at least one correct option for QCM Question ${currentQuestionNumber}`);
+                showAlert(`Veuillez sélectionner au moins une option correcte pour la Question QCM ${currentQuestionNumber}`, 'danger');
                 return null;
             }
 
             if (options.length < 2) {
-                alert(`QCM Question ${currentQuestionNumber} must have at least 2 options`);
+                showAlert(`La Question QCM ${currentQuestionNumber} doit avoir au moins 2 options`, 'danger');
                 return null;
             }
 
@@ -307,7 +306,7 @@ function showExamLink(accessToken) {
     copyBtn.onclick = function() {
         examLinkInput.select();
         document.execCommand('copy');
-        copyStatus.textContent = 'Link copied to clipboard!';
+        copyStatus.textContent = 'Lien copié dans le presse-papiers !';
         setTimeout(() => {
             copyStatus.textContent = '';
         }, 2000);
@@ -321,33 +320,11 @@ document.getElementById('save-exam-btn').addEventListener('click', async () => {
     
     const examMetaData = JSON.parse(sessionStorage.getItem('examMetaData'));
     
-    // Validate total time and score
-    const expectedDuration = examMetaData.duration * 60;
-    const expectedScore = 20;
-    let totalTime = 0;
-    let totalScore = 0;
-
-    questions.forEach(q => {
-        totalTime += q.time || 0;
-        totalScore += q.score || 0;
-    });
-
-    if (totalTime !== expectedDuration) {
-        showAlert(`The total time (${totalTime}s) does not match the required duration (${expectedDuration}s).`, 'danger');
-        return;
-    }
-
-    if (totalScore !== expectedScore) {
-        alert(`The total score (${totalScore}) must be exactly ${expectedScore}.`);
-        return;
-    }
-
     // Prepare FormData for file upload
     const formData = new FormData();
     formData.append('title', examMetaData.title);
     formData.append('description', examMetaData.description);
     formData.append('group', examMetaData.group);
-    formData.append('duration', examMetaData.duration);
     
     // Add questions data (without files)
     const questionsData = questions.map(q => {
@@ -379,10 +356,10 @@ document.getElementById('save-exam-btn').addEventListener('click', async () => {
             showExamLink(data.accessToken);
         } else {
             const error = await response.json();
-            alert(error.message || 'Failed to create exam. Please try again.');
+            showAlert(error.message || 'Échec de la création de l\'examen. Veuillez réessayer.', 'danger');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred while saving the exam.');
+        showAlert('Une erreur est survenue lors de l\'enregistrement de l\'examen.','danger');
     }
 });

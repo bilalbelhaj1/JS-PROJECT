@@ -1,5 +1,24 @@
 <div class="dashboard">
     <link rel="stylesheet" href="/css/profile.css">
+    <style>
+    .btn-primary {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--secondary);
+    }
+    .profile-picture img{
+        border: 3px solid var(--primary);
+    }
+    .form-control:focus{
+         border-color: var(--primary);
+    }
+    .profile-card h2{
+        border-bottom: 2px solid var(--primary);
+    }
+</style>
     <%- include('sidebar.ejs') %>
     <div class="container">
         <div id="alert-message" class="alert" style="display: none;">
@@ -7,33 +26,33 @@
         <button id="alert-close" class="alert-close-btn">&times;</button>
         </div>
         <div class="profile-header">
-            <h1>Profile Settings</h1>
+            <h1>Paramètres du profil</h1>
         </div>
         <div class="profile-card">
-            <h2>Profile Information</h2>
+            <h2>Informations du profil</h2>
             
             <div class="profile-picture">
-                <img src="/img/<%- user.gendre %>-<%- user.role %>.png" alt="Profile Picture" id="profile-img">
+                <img src="/img/<%- user.gender %>-<%- user.role %>.png" alt="Photo de profil" id="profile-img">
             </div>
 
             <form id="profile-form">
                 <div class="form-group">
-                    <label for="name">Username</label>
+                    <label for="name">Nom d'utilisateur</label>
                     <input type="text" id="name" class="form-control" value="<%- user.username %>">
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email Address</label>
+                    <label for="email">Adresse e-mail</label>
                     <input type="email" id="email" class="form-control" value="<%- user.email %>">
                 </div>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
             </form>
         </div>
 
         <div class="profile-card">
-            <h2>Password Settings</h2>
-            <p>Change your password here. Make sure it's strong and secure.</p>
-            <button id="change-password-btn" class="btn btn-outline">Change Password</button>
+            <h2>Paramètres du mot de passe</h2>
+            <p>Changez votre mot de passe ici. Assurez-vous qu'il soit fort et sécurisé.</p>
+            <button id="change-password-btn" class="btn btn-outline">Changer le mot de passe</button>
         </div>
     </div>
 
@@ -41,28 +60,28 @@
         <div class="modal-content">
             <button class="close-btn" id="close-modal">&times;</button>
             <div class="modal-header">
-                <h3>Change Password</h3>
+                <h3>Changer le mot de passe</h3>
             </div>
             <div class="modal-body">
                 <form id="password-form">
                     <div class="form-group password-toggle">
-                        <label for="current-password">Current Password</label>
+                        <label for="current-password">Mot de passe actuel</label>
                         <input type="password" id="current-password" class="form-control" required>
                     </div>
 
                     <div class="form-group password-toggle">
-                        <label for="new-password">New Password</label>
+                        <label for="new-password">Nouveau mot de passe</label>
                         <input type="password" id="new-password" class="form-control" required>
                     </div>
 
                     <div class="form-group password-toggle">
-                        <label for="confirm-password">Confirm New Password</label>
+                        <label for="confirm-password">Confirmer le nouveau mot de passe</label>
                         <input type="password" id="confirm-password" class="form-control" required>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline" id="cancel-password">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Update Password</button>
+                        <button type="button" class="btn btn-outline" id="cancel-password">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Mettre à jour le mot de passe</button>
                     </div>
                 </form>
             </div>

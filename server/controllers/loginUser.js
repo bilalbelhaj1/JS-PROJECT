@@ -2,46 +2,47 @@ import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const login = async (req, res) =>{
-    const { email, password} = req.body;
+const login = async (req, res) => {
+    const { email, password } = req.body;
     console.log(email, password);
 
-    try{
-
-        // Check if the user exists
+    try {
+        // Vérifier si l'utilisateur existe
         const user = await User.findOne({ email });
-        if(!user){
-            return res.status(400).json({ message: "Invalid email" });
+        if (!user) {
+            return res.status(400).json({ message: "Email invalide" });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         console.log(user.password);
-        if(!isMatch){
+        if (!isMatch) {
             console.log(isMatch);
-            return res.status(400).json({ message: "Invalid password" });
+            return res.status(400).json({ message: "Mot de passe invalide" });
         }
 
-        // Generate a JWT token
+        // Générer un token JWT
         const token = jwt.sign(
             { 
-                Fname:user.Fname,
-                Lname:user.Lname,
+                Fname: user.Fname,
+                Lname: user.Lname,
                 userId: user._id,
                 role: user.role,
-                gendre:user.gendre,
+                gender: user.gender,
                 username: user.username 
             },
             process.env.JWT_SECRET || '4sUgd85m6mAr5DCH',
-            { expiresIn: "24h" });
+            { expiresIn: "24h" }
+        );
 
         let url;
-        if(user.role === "Teacher"){
+        if (user.role === "Teacher") {
             url = `/teacher/home`;
-        }else{
+        } else {
             url = `/student/home`;
         }
+
         return res.status(201).json({
-            message: "Login successful",
+            message: "Connexion réussie",
             token,
             url,
             user: {
@@ -50,11 +51,11 @@ const login = async (req, res) =>{
                 email: user.email,
                 role: user.role,
             }
-        })
+        });
 
-    }catch (error) {
+    } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: 'Erreur serveur' });
     }
 }
 

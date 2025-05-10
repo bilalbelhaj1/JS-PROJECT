@@ -29,17 +29,23 @@ function displayExams(exams){
     let examsContainer = document.querySelector('.exams-container');
     exams.forEach(exam => {
         let status;
+        let className;
+        let btnText;
         if(exam.status === 'active'){
-            status = 'inactive';
+            status = 'actif';
+            className = 'inactive'
+            btnText = 'Désactiver'
         }else{
-            status = 'activate';
+            status = 'Inactif';
+            btnText = 'Activer'
+            className = 'activate';
         }
         examsContainer.innerHTML += `<div class="exam-card">
                         <h2>${exam.title}</h2>
                         <p><strong>Description:</strong> ${exam.description}</p>
                         <p><strong>Group:</strong> ${exam.group}</p>
                         <p><strong>Status:</strong> 
-                                <span class="status ${exam.status}">${exam.status}</span>
+                                <span class="status ${exam.status}">${status}</span>
                         </p>
                         <div class="exam-link">
                           <input type="text" value="http://localhost:5000/student/takeExam/${exam.accesstoken}">
@@ -47,8 +53,8 @@ function displayExams(exams){
                         </div>
                         <div class="result"></div>
                         <div class="card-actions">
-                            <button class="statusBtn btn ${status}-btn" data-examId="${exam.examId}" id="${exam.status}">${status}</button>
-                            <button class="btn delete-btn" data-examId="${exam.examId}" id="delete-exam">Delete</button>
+                            <button class="statusBtn btn ${className}-btn" data-examId="${exam.examId}" id="${exam.status}">${btnText}</button>
+                            <button class="btn delete-btn" data-examId="${exam.examId}" id="delete-exam">Supprimer</button>
                         </div>
                     </div>`
 
@@ -61,22 +67,21 @@ function displayExams(exams){
 function copyExamLink() {
     document.querySelectorAll('#copyExamLink').forEach(btn => {
         btn.addEventListener('click', (e) => {
+            const examCards = document.querySelectorAll('.exam-card');
+            examCards.forEach(examCard =>{
+                examCard.addEventListener('copy',()=>{
+                    examCard.querySelector('.result').innerText = 'Copied';
+                    setTimeout(()=>{
+                        examCard.querySelector('.result').innerText = '';
+                    },1000)
+                })
+            })
             let button = e.currentTarget; 
             const input = button.previousElementSibling; 
             input.select();
             document.execCommand('copy');
         });
     });
-
-    const examCards = document.querySelectorAll('.exam-card');
-    examCards.forEach(examCard =>{
-        examCard.addEventListener('copy',()=>{
-            examCard.querySelector('.result').innerText = 'Copied';
-            setTimeout(()=>{
-                document.querySelector('.result').innerText = '';
-            },1000)
-        })
-    })
 }
 
 function examsDeletion(){

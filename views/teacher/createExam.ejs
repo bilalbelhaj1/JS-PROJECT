@@ -8,7 +8,7 @@
         <div class="topbar">
             <h3>Add Questions to: <span style="color: var(--primary);" id="js-exam-title"></span></h3>
             <div class="user-profile">
-              <img src="/img/<%- user.gendre %>-<%- user.role %>.png" alt="Teacher">
+              <img src="/img/<%- user.gender %>-<%- user.role %>.png" alt="Teacher">
               <span>Prof. <%- user.Fname %> <%- user.Lname %></span>
           </div>
         </div>
@@ -23,19 +23,19 @@
         </button>
         <!-- fin ghayban link -->
 <div id="examLinkModal" class="modal">
-    <div class="modal-content">
-      <span class="close-modal">&times;</span>
-      <h3>Exam Created Successfully!</h3>
-      <p>Share this link with your students:</p>
-      <div class="link-container">
-        <input type="text" id="examLinkInput" readonly>
-        <button id="copyLinkBtn" class="copy-btn">
-          <i class="fas fa-copy"></i> Copy
-        </button>
-      </div>
-      <div id="copyStatus" class="copy-status"></div>
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h3>Examen créé avec succès !</h3>
+    <p>Partagez ce lien avec vos étudiants :</p>
+    <div class="link-container">
+      <input type="text" id="examLinkInput" readonly>
+      <button id="copyLinkBtn" class="copy-btn">
+        <i class="fas fa-copy"></i> Copier
+      </button>
     </div>
+    <div id="copyStatus" class="copy-status"></div>
   </div>
+</div>
 </div>
 </div>
 <script src="/js/utils.js"></script>

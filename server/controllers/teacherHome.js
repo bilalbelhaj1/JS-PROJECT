@@ -9,12 +9,13 @@ const teacherHome = async (req, res)=>{
     console.log(exams);
     let activeExams = 0;
     if(totalExams !== 0){
-        activeExams = exams.map(e=>e.status === 'active').length;
+        activeExams = exams.filter(e=>e.status === 'active').length;
         exams.forEach(e=>{
             createdQuestions += e.questions.length;
         })
+        console.log(activeExams);
     }
-    const examsStatistic = {totalExams, activeExams, createdQuestions};
+    const examsStatistic = {activeExams,totalExams, createdQuestions};
     console.log(examsStatistic);
     res.render('teacher/home', { user: req.user,examsStatistic,activePage: 'home' });
 }
